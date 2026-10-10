@@ -41,7 +41,7 @@ tbody tr:hover{background:#f6f9ff}
 @media(max-width:760px){.two{grid-template-columns:1fr}}
 footer{color:var(--sub);font-size:12px;text-align:center;margin-top:30px}
 code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
-</style>
+html{scroll-behavior:smooth;scroll-padding-top:70px}body{background:white;color:#303239;font-family:Georgia,"Songti SC",SimSun,serif;font-size:17px;line-height:1.95}.wrap{max-width:1100px;padding:65px 30px 90px}header.hero{background:none;color:#303239;border-radius:0;border-bottom:1px solid #ddd;padding:15px 0 40px;margin:0}header.hero:before{content:'RESEARCH ESSAY / OPENROUTER';display:block;color:#285caa;letter-spacing:2px;font:12px system-ui;margin-bottom:25px}header.hero h1{font-size:clamp(32px,4vw,50px);line-height:1.4;font-weight:500;max-width:900px}header.hero p{font-size:16px;color:#666;max-width:800px;line-height:1.9;margin-top:18px}.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:0;margin-top:30px}.kpi{background:none;border:0;border-left:1px solid #ddd;border-radius:0;min-width:0;padding:10px 15px}.kpi .v{color:#285caa;font:28px Georgia,serif}.kpi .l{color:#666}section{border:0;border-radius:0;box-shadow:none;background:none;padding:45px 0 20px;margin:0}h2{max-width:740px;margin:0 auto 20px;font-size:27px;font-weight:500;line-height:1.55}h2 .tag{background:none;color:#285caa;padding:0;white-space:nowrap;font-size:13px}.lead{max-width:740px;margin:0 auto 28px;color:#303239;font-size:17px;line-height:1.95}.chart{padding:15px 0;margin:25px 0;border-block:1px solid #eee}.legend{font-size:13px;margin:15px auto 25px;max-width:920px}.note,.insight{max-width:740px;margin:25px auto;background:#f7f8fa;border:0;border-left:2px solid #285caa;border-radius:0;padding:18px 22px;font-size:15px;line-height:1.9}.two{gap:28px}table{font-size:14px;line-height:1.8;min-width:600px}th,td{padding:11px 13px}th{position:static}.table-scroll{overflow:auto}footer{max-width:740px;text-align:left;margin:50px auto 0;border-top:1px solid #ddd;padding-top:25px}header,header p,h1,h2,h3,h4,.kpi,.legend,.note,.insight,table,caption,footer,.essay-nav,svg{font-family:"Kaiti SC",STKaiti,KaiTi,楷体,serif}.essay-nav{position:sticky;top:0;z-index:10;background:#fffffff5;border-bottom:1px solid #ddd;padding:15px 0;display:flex;gap:24px;overflow:auto;white-space:nowrap;font-size:14px}.essay-nav a{color:#536171;text-decoration:none}@media(max-width:760px){.wrap{padding:30px 20px}.kpis{grid-template-columns:repeat(3,1fr)}h2{font-size:23px;display:block}h2 .tag{display:block}.lead{font-size:16px}.two{grid-template-columns:1fr}.essay-nav{gap:18px}}@media print{.essay-nav{display:none}.wrap{padding:0}}.research-text{max-width:740px;margin:36px auto}.research-text h3{font:22px STKaiti,KaiTi,serif}.research-text p{font-family:Georgia,"Songti SC",SimSun,serif;font-size:17px;line-height:1.95}.contact-widget{position:fixed;right:24px;bottom:24px;z-index:50}.contact-widget button{border:0;border-radius:28px;background:#285caa;color:white;padding:13px 25px;font:18px STKaiti,KaiTi,serif;cursor:pointer}.contact-panel{background:white;border:1px solid #ddd;border-radius:12px;padding:20px;margin-bottom:12px;box-shadow:0 6px 25px #0002}.contact-panel[hidden]{display:none}.contact-panel a{color:#285caa;font:16px system-ui}@media print{.contact-widget{display:none}}</style>
 </head>
 <body>
 <div class="wrap">
@@ -50,12 +50,12 @@ code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
   <p>数据源：OpenRouter 公开榜单周度快照（model_date_merged_cumulative.csv）｜ 模型 621 个 · 厂商 80 家 · 快照周 161 个（2025-07-07 ~ 2026-09-21）</p>
   <p>分析维度：使用量增长（数据飞轮输入端）· 推理性能与最优供给方（性能竞争）· 厂商 token 份额与集中度（平台竞争）</p>
   <div class="kpis" id="kpis"></div>
-</header>
+</header><nav class=essay-nav aria-label=章节目录><a href=#chapter-0>数据口径</a><a href=#chapter-1>使用增长</a><a href=#chapter-2>流量份额</a><a href=#chapter-3>推理性能</a><a href=#chapter-4>供给方</a><a href=#chapter-5>集中度</a><a href=#chapter-6>质量榜</a></nav>
 
-<section>
+<section id=chapter-0>
   <h2><span class="tag">说明</span>数据口径与覆盖</h2>
   <div class="lead">该 CSV 是多次抓取按列拼接的超宽面板（6822 列）。不同指标覆盖的周次不一致，分析时按指标分别取有效窗口，避免误算：</div>
-  <table>
+  <div class=table-scroll><table>
     <thead><tr><th>指标组</th><th>含义</th><th>有效周次</th><th>在本文的角色</th></tr></thead>
     <tbody>
       <tr><td><code>top_models</code></td><td>各模型每日 token / 请求量</td><td>2026-06-29 ~ 2026-09-20（63周）</td><td>数据飞轮「使用规模」</td></tr>
@@ -63,34 +63,34 @@ code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
       <tr><td><code>author_market_share</code></td><td>厂商占全平台 token 份额</td><td>2025-07-07 ~ 2026-09-21（64周）</td><td>平台竞争（份额维度）</td></tr>
       <tr><td><code>benchmarks_design_arena</code></td><td>设计竞技场 ELO 评分</td><td>2025-12 ~ 2026-09（约73周，design-arena）</td><td>质量竞争（飞轮产出）</td></tr>
     </tbody>
-  </table>
+  </table></div>
   <div class="note">口径提示：<code>author_market_share</code> 为各厂商占 OpenRouter <b>全平台</b> token 流量的份额（覆盖约 9 家头部厂商）；<code>top_models</code> 求和得到的是其子集近似，二者高度相关，已在重叠日交叉校验一致。</div>
-</section>
+<div class="research-text"><h3>如何理解数据口径</h3><p>使用规模、推理性能和厂商份额分别对应需求侧、供给侧和竞争结构。不同指标需要在各自有效窗口内比较。内嵌日期包含相邻日记录，因此观测点数不能直接等同于独立周数；进一步分析需要核对抓取频率、统计周期及滚动窗口是否重叠。</p></div></section>
 
-<section>
+<section id=chapter-1>
   <h2><span class="tag">飞轮①</span>数据飞轮：使用规模持续扩张</h2>
   <div class="lead">OpenRouter 是生成式 AI 的「流量枢纽」——主流平台模型经其分发。周度总 token / 请求量直接测度「用户与模型互动产生的数据量」，即飞轮的输入端。窗口 2026-06-29 ~ 2026-09-20。</div>
   <div class="chart"><svg id="c_fly" viewBox="0 0 920 360"></svg></div>
   <div class="legend"><span><i style="background:var(--accent)"></i>周度总 token（十亿，左轴）</span><span><i style="background:var(--accent2)"></i>周度总请求（百万，右轴）</span></div>
   <div class="insight">📈 在 63 周窗口内，周度总 token 增长 <b>2.33 倍</b>、请求量增长 <b>1.75 倍</b>，活跃路由模型由 365 增至 426+。使用规模的指数级扩张 = 互动数据持续积累 = 飞轮输入端不断放大。</div>
-</section>
+<div class="research-text"><h3>使用增长与数据飞轮</h3><p>请求量更接近交互频次，Token 量还受到输入长度、输出长度和任务结构影响。Token 增长快于请求增长，可能反映平均处理长度增加或模型组合变化。流量增长提供产品改进的潜在机会，但不能证明数据已经用于训练；数据权限、反馈质量和训练流程决定其能否转化为模型质量提升。</p></div></section>
 
-<section>
+<section id=chapter-2>
   <h2><span class="tag">飞轮②</span>平台 token 份额：头部厂商争夺数据入口</h2>
   <div class="lead">同一窗口内，按 <code>top_models</code> 模型 token 求和得到的各厂商份额演化（Top 10）。谁占据流量入口，谁就掌握飞轮最稀缺的「使用数据」。</div>
   <div class="chart"><svg id="c_share" viewBox="0 0 920 380"></svg></div>
   <div class="legend" id="lg_share"></div>
   <div class="insight">🔄 份额呈「多强并立 + 高频轮动」：头部由 openai / google / anthropic / deepseek / xiaomi 等交替领跑，说明数据入口竞争远未固化，飞轮红利仍在再分配。</div>
-</section>
+<div class="research-text"><h3>流量份额的解释</h3><p>份额是相对指标，份额下降时厂商绝对用量仍可能增长。模型上线、价格调整和路由策略也会影响短期分布。模型子集与全平台份额的分母不同，应分别解释。流量轮动描述使用结构变化，不能直接证明数据所有权或议价能力变化。</p></div></section>
 
-<section>
+<section id=chapter-3>
   <h2><span class="tag">性能①</span>推理性能长期改善：效率竞争的底线抬升</h2>
   <div class="lead">对全部 2025-07-07 ~ 2026-09-21（161周） 周的性能模型取中位数 p50 延迟与 p50 吞吐。延迟下行、吞吐上行，反映算力配置与推理工程的整体进步——这是飞轮「输出端」（更好体验→更多使用）的硬件基础。窗口 2025-07-07 ~ 2026-09-21。</div>
   <div class="chart"><svg id="c_perf" viewBox="0 0 920 360"></svg></div>
   <div class="legend"><span><i style="background:var(--accent)"></i>中位数 p50 延迟（ms，左轴，越低越好）</span><span><i style="background:var(--accent2)"></i>中位数 p50 吞吐（tok/s，右轴，越高越好）</span></div>
-</section>
+<div class="research-text"><h3>性能改善的边界</h3><p>延迟影响等待时间，吞吐影响生成速度。中位数能减弱极端观测的影响，但不同任务、上下文长度和并发负载仍会产生体验差异。跨期变化也可能包含样本替换的影响；更严格的比较需要追踪固定模型，并控制请求条件和测量方法。</p></div></section>
 
-<section>
+<section id=chapter-4>
   <h2><span class="tag">性能②</span>最优供给方之争：推理基础设施成为独立战场</h2>
   <div class="lead">同一模型在不同供给方上延迟/吞吐差异巨大。<code>best_latency_provider</code> / <code>best_throughput_provider</code> 统计「在多少模型上该供给方是最优」。这是平台/云厂在「算力资源配置」上的直接较量。</div>
   <div class="two">
@@ -100,9 +100,9 @@ code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
       <div class="legend"><span>最优「吞吐」供给方（累计上榜模型数）</span></div></div>
   </div>
   <div class="insight">🏗️ 延迟之战 <b>DeepInfra</b> 领先（1491 次最优），吞吐之战 <b>Alibaba</b> 领先（1009 次最优）。中国云厂在推理效率上占据优势——性能竞争已超出「模型能力」，延伸到算力调度与供给方生态。</div>
-</section>
+<div class="research-text"><h3>最优供给方如何比较</h3><p>上榜计数同时受到性能、模型覆盖和观测次数影响。覆盖更多模型可能带来更多获胜机会，因此计数不等于全面领先。实际服务选择还应比较价格、稳定性、速率限制和具体模型表现，单一榜单不足以支持对整个云服务行业的普遍判断。</p></div></section>
 
-<section>
+<section id=chapter-5>
   <h2><span class="tag">平台</span>厂商市场份额与集中度</h2>
   <div class="lead">报告版 <code>author_market_share</code>（占全平台 token 流量）随时间的头部厂商份额，以及市场集中度（HHI、Top3 合计）。窗口 2025-07-07 ~ 2026-09-21。</div>
   <div class="chart"><svg id="c_ms" viewBox="0 0 920 380"></svg></div>
@@ -112,17 +112,17 @@ code{background:#eef1f6;padding:1px 5px;border-radius:4px;font-size:12.5px}
       <div class="legend"><span>市场集中度：HHI（左）与 Top3 份额%（右）</span></div></div>
     <div>
       <div class="insight" style="margin-top:0">🧲 最新周 Top3 厂商合计约 <b>65.34%</b> 流量，HHI≈1752.9（中等集中度）。头部集中明显但非寡占——这正是飞轮「强者愈强」正反馈与「新进入者仍能突围」并存的证据。</div>
-      <table id="t_perf"></table>
+      <div class=table-scroll><table id="t_perf"></table></div>
     </div>
   </div>
-</section>
+<div class="research-text"><h3>集中度与竞争结构</h3><p>HHI 为各参与者份额平方的总和，按百分数计算时最高为 10000；Top3 份额反映前三家合计占比。解释前应确认全部厂商是否纳入、剩余份额如何处理及分母是否一致。集中度描述流量分布，不能单独证明市场支配力或数据飞轮的因果机制。</p></div></section>
 
-<section>
+<section id=chapter-6>
   <h2><span class="tag">质量</span>设计竞技场质量榜（飞轮产出端）</h2>
   <div class="lead">最新基准日 2026-09-07 的 design-arena「website」类目 ELO 评分 Top 模型。质量提升是飞轮的正反馈终点：更好模型→更多使用→更多数据。</div>
-  <div class="chart" style="max-height:420px;overflow:auto"><table id="t_qual"></table></div>
+  <div class="chart" style="max-height:420px;overflow:auto"><div class=table-scroll><table id="t_qual"></table></div></div>
   <div class="note">ELO 评分为 LMArena 式相对评分（越高越强）。模型名取自基准列，厂商归属因命名差异未完全映射。</div>
-</section>
+<div class="research-text"><h3>质量评测与后续研究</h3><p>ELO 是特定评测环境下的相对评分。website 类目主要反映网页生成任务，不能直接推广至所有模型能力。检验数据飞轮需要将使用量、质量、性能和价格置于一致的时间框架，区分模型升级、供给优化和需求变化。当前结果提供描述性研究线索，尚未完成因果识别。</p></div></section>
 
 <footer>
   生成式 AI 平台数据飞轮研究 · 数据源 OpenRouter 公开榜单（周度快照）· 单文件离线报告 · 2026-09-21
@@ -258,5 +258,5 @@ let qh=`<tr><th>#</th><th>模型</th><th class="num">设计竞技场 ELO</th></t
 let qb=ql.items.map((r,i)=>`<tr><td>${i+1}</td><td>${r.model}</td><td class="num">${r.score?r.score.toFixed(0):'-'}</td></tr>`).join("");
 document.getElementById("t_qual").innerHTML=`<thead>${qh}</thead><tbody>${qb}</tbody>`;
 </script>
-</body>
+<div class="contact-widget"><div id="contact-panel" class="contact-panel" hidden><a href="mailto:nkuchy@163.com">nkuchy@163.com</a></div><button type="button" id="contact-toggle" aria-expanded="false" aria-controls="contact-panel">联系</button></div><script>document.getElementById('contact-toggle').onclick=function(){const p=document.getElementById('contact-panel');p.hidden=!p.hidden;this.setAttribute('aria-expanded',String(!p.hidden))};</script></body>
 </html>
