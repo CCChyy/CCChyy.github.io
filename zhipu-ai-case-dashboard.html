@@ -89,10 +89,26 @@
   .foot{max-width:680px;margin:0 auto;padding:0 24px 64px;font-size:12.5px;color:var(--light-gray)}
   @media (max-width:640px){.page{padding:48px 20px 72px}h1{font-size:30px}}
 </style>
-</head>
+<style id="reference-report-format">
+/* Reference report typography and reading layout */
+:root{--accent:#2b5d8a;--ink:#1a1a1a;--line:#e3e3e3;--sub:#666a72;--report-body:Georgia,"Songti SC",SimSun,serif;--report-ui:Georgia,"Kaiti SC",STKaiti,KaiTi,"楷体",serif}
+body{background:#fff;color:#1a1a1a;font-family:var(--report-body);font-size:17px;line-height:1.78;text-rendering:optimizeLegibility}
+h1,h2,h3,h4,nav,header,header p,figcaption,caption,table,button,.meta,.legend,.kpi,.note,.insight,.lead,.byline,.kicker,.date-line,.page-label,.abstract-keywords,.metric,.cap,footer{font-family:var(--report-ui)}
+h1{font-size:33px!important;line-height:1.25!important;font-weight:600!important;letter-spacing:.01em}h2{font-size:23px!important;line-height:1.3;font-weight:600!important}h3{font-size:19px;font-weight:600}p{line-height:1.78}a{color:var(--accent)}
+.abstract,.report-abstract,.summary{border-top:1px solid #1a1a1a;border-bottom:1px solid #e3e3e3;border-left:0;border-radius:0;background:none;padding:20px 0;margin:28px 0;font-size:16.5px}
+.report-abstract p,.research-text p{font-size:16.5px;line-height:1.78}.report-abstract h2{font-size:17px!important;margin-bottom:12px}.note,.lead{background:#fafafa;border-left:3px solid var(--accent);border-radius:0;padding:10px 14px;color:#666a72;font-size:14px}.insight{border:0;border-block:1px solid #e3e3e3;background:none;padding:14px 0}
+figure{margin:30px 0 14px}figcaption,.cap{font-size:13px;line-height:1.6;color:#666a72}svg{max-width:100%;height:auto}.chart{background:#fcfcfc;border:1px solid #e3e3e3;border-radius:6px;padding:10px;overflow-x:auto}
+table{border-collapse:collapse;font-size:13.5px;line-height:1.6}th,td{border:0;border-bottom:1px solid #e3e3e3;padding:9px 10px}thead th{border-top:2px solid #1a1a1a;background:none}tbody tr:last-child td{border-bottom:2px solid #1a1a1a}
+.report-toc{position:fixed!important;top:0!important;left:max(0px,calc((100vw - 1180px)/2))!important;width:230px!important;height:100vh;overflow-y:auto;padding:48px 18px 40px 24px!important;border:0!important;border-right:1px solid #e3e3e3!important;background:white!important;border-radius:0!important;display:block!important;font-size:13px!important;line-height:1.45;z-index:12;white-space:normal!important;margin:0!important}
+.report-toc a{display:block;color:#666a72;text-decoration:none;border-bottom:0;padding:6px 0 6px 12px;border-left:2px solid transparent;white-space:normal}.report-toc a:hover,.report-toc a.active{color:#2b5d8a;border-left-color:#2b5d8a}.report-toc ol{columns:1;padding-left:0;list-style:none}.report-toc li{margin:0}.report-toc h3,.toc-title{font-size:11px!important;letter-spacing:.12em;color:#999;margin:0 0 14px}
+@media(min-width:921px){.report-reader{width:720px!important;max-width:calc(100vw - 260px)!important;margin:0 0 0 max(230px,calc((100vw - 1180px)/2 + 230px))!important;padding:54px 28px 120px!important}}
+@media(max-width:920px){.report-toc{display:none!important}.report-reader{width:auto!important;max-width:760px!important;margin:0 auto!important;padding:44px 24px 90px!important}}
+@media(max-width:680px){h1{font-size:27px!important}.two{grid-template-columns:1fr}.report-reader{padding:38px 20px 90px!important}}
+@media print{.report-toc{display:none!important}.report-reader{width:auto!important;max-width:none!important;margin:0!important;padding:0!important}}
+.kicker{font-size:12px;color:#999;letter-spacing:.16em}.byline{font-size:14px;font-style:italic}.foot{max-width:720px}.metric .mv{color:#2b5d8a}.tbl{overflow-x:auto}h2{scroll-margin-top:24px}</style></head>
 <body>
 
-<nav class="toc" id="toc">
+<nav class="toc report-toc" id="toc">
   <div class="toc-title">目录</div>
   <a href="#overview">总览</a>
   <a href="#finance">一 · 财务脉冲</a>
@@ -104,7 +120,7 @@
   <a href="#refs">数据来源</a>
 </nav>
 
-<div class="page">
+<div class="page report-reader">
 
   <div class="kicker">公开数据报告 · 智谱 AI</div>
   <h1>智谱 AI：算力资源配置与算力服务定价</h1>
