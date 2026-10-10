@@ -1,655 +1,351 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="智谱AI公开财务、定价、模型与开发者生态数据报告">
-  <title>智谱 AI｜公开数据报告</title>
-  <style>
-    :root {
-      --bg: #070d11;
-      --bg-2: #0a1419;
-      --panel: #0d1b21;
-      --panel-2: #10232a;
-      --panel-3: #0b171c;
-      --line: #20343b;
-      --line-bright: #31515b;
-      --text: #e9f2f0;
-      --muted: #8ba1a6;
-      --muted-2: #5f777d;
-      --cyan: #43e6d1;
-      --cyan-dim: #17655f;
-      --amber: #ffbd5a;
-      --coral: #ff806b;
-      --blue: #75b8ff;
-      --lime: #b6eb7e;
-      --violet: #b5a2ff;
-      --shadow: 0 18px 45px rgba(0, 0, 0, .24);
-      --radius: 7px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智谱 AI：算力资源配置与算力服务定价 · 公开数据报告</title>
+<style>
+  :root{
+    --text:rgba(0,0,0,.84);
+    --gray:#6f6f6f;
+    --light-gray:#b9b9b9;
+    --hair:#e5e5e5;
+    --ink-soft:#9aa4b2;
+    --accent:#1f4e79;
+    --serif:Georgia,"Kaiti SC",STKaiti,KaiTi,"楷体","PingFang SC","Microsoft YaHei",serif;
+    --sans:Georgia,"Kaiti SC",STKaiti,KaiTi,"楷体","PingFang SC","Microsoft YaHei",serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:#fff;color:var(--text);
+    font-family:var(--sans);font-size:16px;line-height:1.78;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--light-gray)}
+  a:hover{border-bottom-color:var(--text)}
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--text);
-      background-color: var(--bg);
-      background-image: linear-gradient(rgba(67, 230, 209, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(67, 230, 209, .035) 1px, transparent 1px);
-      background-size: 38px 38px;
-      font-family: Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
-      line-height: 1.55;
-      letter-spacing: 0;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      border: 1px solid rgba(67, 230, 209, .11);
-      z-index: 20;
-    }
-    a { color: var(--cyan); }
-    button, select { font: inherit; }
-    button { cursor: pointer; }
-    .app-shell { min-height: 100vh; }
-    .topbar {
-      min-height: 62px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 0 max(18px, calc((100vw - 1400px) / 2));
-      background: rgba(7, 13, 17, .94);
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(12px);
-    }
-    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-    .brand-mark {
-      width: 29px;
-      height: 29px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--cyan);
-      color: var(--cyan);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .04em;
-    }
-    .brand-name { font-size: 13px; font-weight: 700; white-space: nowrap; }
-    .brand-sub { color: var(--muted); font-size: 11px; white-space: nowrap; }
-    .system-readout { display: flex; align-items: center; gap: 14px; max-width: 52%; overflow: hidden; color: var(--muted); font-size: 11px; white-space: nowrap; }
-    .system-readout span { overflow: hidden; text-overflow: ellipsis; }
-    .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px var(--lime); display: inline-block; }
-    .main-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 192px minmax(0, 1fr); }
-    .sidebar { padding: 26px 18px 40px 20px; border-right: 1px solid var(--line); }
-    .side-label { color: var(--muted-2); font-size: 10px; letter-spacing: .12em; margin: 0 0 10px; }
-    .side-nav { display: grid; gap: 3px; position: sticky; top: 86px; }
-    .side-nav a {
-      display: flex;
-      justify-content: space-between;
-      gap: 7px;
-      padding: 9px 10px;
-      color: var(--muted);
-      border-left: 2px solid transparent;
-      text-decoration: none;
-      font-size: 12px;
-    }
-    .side-nav a:hover { color: var(--text); border-left-color: var(--cyan); background: rgba(67, 230, 209, .06); }
-    .side-nav small { color: var(--muted-2); font-size: 10px; }
-    .content { min-width: 0; padding: 38px 38px 84px; }
-    .section { scroll-margin-top: 84px; padding-top: 42px; }
-    .section:first-child { padding-top: 0; }
-    .overline { color: var(--cyan); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { max-width: 900px; margin: 10px 0 13px; font-size: clamp(32px, 4.3vw, 60px); line-height: 1.06; letter-spacing: 0; }
-    h2 { margin-bottom: 6px; font-size: 27px; line-height: 1.2; }
-    h3 { margin-bottom: 10px; font-size: 16px; line-height: 1.25; }
-    .lede { max-width: 830px; color: var(--muted); font-size: 15px; }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
-    .section-note { max-width: 580px; margin: 0; color: var(--muted); font-size: 12px; text-align: right; }
-    .terminal-strip { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 12px; margin-top: 25px; border: 1px solid var(--line); background: rgba(13, 27, 33, .72); color: var(--muted); font: 11px/1.4 "SFMono-Regular", Consolas, monospace; }
-    .terminal-strip strong { color: var(--cyan); font-weight: 500; }
-    .grid { display: grid; gap: 12px; }
-    .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 22px; }
-    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .panel {
-      min-width: 0;
-      background: rgba(13, 27, 33, .91);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    .panel-pad { padding: 18px; }
-    .metric { min-height: 126px; padding: 15px; border-top: 2px solid var(--cyan-dim); }
-    .metric:nth-child(2) { border-top-color: var(--coral); }
-    .metric:nth-child(3) { border-top-color: var(--amber); }
-    .metric:nth-child(4) { border-top-color: var(--blue); }
-    .metric-label { color: var(--muted); font-size: 11px; }
-    .metric-value { margin: 12px 0 5px; font-size: 28px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .metric-foot { color: var(--muted-2); font-size: 11px; }
-    .up { color: var(--lime); }
-    .down { color: var(--coral); }
-    .amber { color: var(--amber); }
-    .blue { color: var(--blue); }
-    .signal-grid { grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); margin-top: 12px; }
-    .signal-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-    .signal-title h3 { margin: 0; }
-    .signal-tag { color: var(--cyan); border: 1px solid var(--cyan-dim); padding: 3px 7px; font: 10px "SFMono-Regular", Consolas, monospace; }
-    .signal-list { display: grid; gap: 11px; }
-    .signal-row { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(32, 52, 59, .8); }
-    .signal-row:last-child { border-bottom: 0; }
-    .signal-code { color: var(--muted-2); font: 10px "SFMono-Regular", Consolas, monospace; }
-    .signal-name { font-size: 12px; }
-    .signal-value { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .readout { height: 100%; padding: 18px; background: var(--panel-3); border-left: 2px solid var(--amber); }
-    .readout h3 { color: var(--amber); }
-    .readout p { color: var(--muted); font-size: 13px; }
-    .readout p:last-child { margin-bottom: 0; }
-    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
-    .control-label { color: var(--muted); font-size: 11px; }
-    select, .tab-button {
-      color: var(--text);
-      border: 1px solid var(--line-bright);
-      background: #0a171c;
-      border-radius: 4px;
-      padding: 8px 10px;
-      font-size: 12px;
-    }
-    select:focus, button:focus, a:focus { outline: 2px solid var(--cyan); outline-offset: 2px; }
-    .tab-row { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tab-button { color: var(--muted); }
-    .tab-button:hover, .tab-button.active { color: var(--bg); background: var(--cyan); border-color: var(--cyan); }
-    .tab-button.active::before { content: "// "; }
-    .chart-panel { padding: 18px; }
-    .chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 16px; }
-    .chart-head h3 { margin: 0; }
-    .chart-unit { color: var(--muted-2); font-size: 10px; }
-    .bar-chart { display: grid; gap: 14px; }
-    .bar-row { display: grid; grid-template-columns: 118px minmax(80px, 1fr) 75px; gap: 10px; align-items: center; font-size: 12px; }
-    .bar-label { color: var(--muted); min-width: 0; }
-    .bar-track { height: 12px; overflow: hidden; background: #14252b; border: 1px solid #1e353d; }
-    .bar-fill { height: 100%; width: 0; background: var(--cyan); transition: width .35s ease; }
-    .bar-fill.coral { background: var(--coral); }
-    .bar-fill.amber { background: var(--amber); }
-    .bar-fill.blue { background: var(--blue); }
-    .bar-value { color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
-    .mini-legend { display: flex; gap: 13px; flex-wrap: wrap; margin-top: 17px; color: var(--muted-2); font-size: 10px; }
-    .legend-dot { width: 8px; height: 8px; display: inline-block; margin-right: 5px; border-radius: 50%; background: var(--cyan); }
-    .legend-dot.coral { background: var(--coral); }
-    .legend-dot.amber { background: var(--amber); }
-    .legend-dot.blue { background: var(--blue); }
-    .data-grid { overflow-x: auto; }
-    table { width: 100%; min-width: 570px; border-collapse: collapse; font-size: 12px; }
-    th, td { padding: 10px 9px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
-    th { color: var(--muted-2); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-    td { color: var(--muted); }
-    td strong { color: var(--text); font-weight: 600; }
-    tr:hover td { background: rgba(67, 230, 209, .035); }
-    .mono { font-family: "SFMono-Regular", Consolas, monospace; font-variant-numeric: tabular-nums; }
-    .note { color: var(--muted-2); font-size: 11px; }
-    .note strong { color: var(--amber); }
-    .data-card { padding: 16px; }
-    .data-card h3 { margin-bottom: 12px; }
-    .price-layout { grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr); }
-    .price-table table { min-width: 680px; }
-    .price-emphasis { color: var(--cyan); font-weight: 700; }
-    .price-side { display: grid; gap: 10px; align-content: start; }
-    .price-stat { padding: 14px; background: #09171c; border-left: 2px solid var(--cyan); }
-    .price-stat:nth-child(2) { border-left-color: var(--coral); }
-    .price-stat:nth-child(3) { border-left-color: var(--amber); }
-    .price-stat h3 { margin-bottom: 4px; }
-    .price-stat p { margin: 0; color: var(--muted); font-size: 12px; }
-    .model-layout { grid-template-columns: minmax(0, 1.28fr) minmax(280px, .72fr); }
-    .model-table tbody tr { cursor: pointer; }
-    .model-table tbody tr.selected td { color: var(--text); background: rgba(67, 230, 209, .1); }
-    .model-table tbody tr.selected td:first-child { border-left: 2px solid var(--cyan); }
-    .model-detail { min-height: 100%; padding: 18px; background: #09171c; border: 1px solid var(--line); }
-    .model-detail .model-name { color: var(--cyan); font: 700 24px/1.1 "SFMono-Regular", Consolas, monospace; }
-    .model-detail p { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
-    .meter-list { display: grid; gap: 10px; margin-top: 18px; }
-    .meter { display: grid; grid-template-columns: 75px 1fr auto; gap: 8px; align-items: center; color: var(--muted-2); font-size: 10px; }
-    .meter-track { height: 5px; background: #182b32; }
-    .meter-fill { height: 100%; background: var(--cyan); }
-    .eco-tabs { margin-bottom: 14px; }
-    .eco-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .eco-card { min-height: 115px; padding: 15px; border: 1px solid var(--line); background: rgba(10, 23, 28, .92); }
-    .eco-card .eco-value { margin: 8px 0 5px; color: var(--cyan); font-size: 24px; font-weight: 700; }
-    .eco-card .eco-label { color: var(--muted); font-size: 11px; }
-    .eco-card .eco-date { color: var(--muted-2); font-size: 10px; }
-    .chain { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
-    .chain-step { min-height: 142px; position: relative; padding: 17px 15px; background: rgba(13, 27, 33, .9); border: 1px solid var(--line); }
-    .chain-step + .chain-step { border-left: 0; }
-    .chain-step + .chain-step::before { content: ">"; position: absolute; left: -8px; top: 52px; z-index: 2; color: var(--cyan); background: var(--bg); font: 700 13px "SFMono-Regular", Consolas, monospace; }
-    .chain-index { color: var(--amber); font: 10px "SFMono-Regular", Consolas, monospace; }
-    .chain-step h3 { margin: 11px 0 6px; font-size: 14px; }
-    .chain-step p { margin: 0; color: var(--muted); font-size: 11px; }
-    .integrity { border-left: 2px solid var(--coral); }
-    .source-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-    .source-list li { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
-    .source-list span { display: block; color: var(--muted-2); font-size: 10px; }
-    .footer { padding-top: 36px; color: var(--muted-2); font-size: 10px; }
-    @media (max-width: 1080px) {
-      .main-grid { grid-template-columns: 1fr; }
-      .sidebar { padding: 8px 18px; border-right: 0; border-bottom: 1px solid var(--line); }
-      .side-nav { display: flex; flex-wrap: wrap; position: static; }
-      .side-nav a { padding: 7px 9px; }
-      .content { padding-top: 30px; }
-      .chain { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-      .chain-step + .chain-step { border-left: 1px solid var(--line); }
-      .chain-step + .chain-step::before { display: none; }
-      .chain-step:last-child { grid-column: span 3; }
-    }
-    @media (max-width: 760px) {
-      .topbar { padding: 0 14px; }
-      .system-readout { display: none; }
-      .content { padding: 26px 15px 60px; }
-      .section-head { display: block; }
-      .section-note { margin-top: 9px; text-align: left; }
-      .metrics, .two, .three, .signal-grid, .price-layout, .model-layout { grid-template-columns: 1fr; }
-      .eco-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .chain { grid-template-columns: 1fr; }
-      .chain-step:last-child { grid-column: auto; }
-      .bar-row { grid-template-columns: 95px minmax(60px, 1fr) 65px; gap: 7px; }
-      h1 { font-size: 36px; }
-    }
-    @media (max-width: 420px) {
-      .brand-sub { display: none; }
-      .eco-cards { grid-template-columns: 1fr; }
-      .metric-value { font-size: 25px; }
-    }
-    @media print {
-      body { background: #fff; color: #111; }
-      body::before, .sidebar, .topbar { display: none; }
-      .main-grid { display: block; }
-      .content { padding: 0; }
-      .panel, .data-card, .chart-panel, .model-detail { color: #111; background: #fff; box-shadow: none; border-color: #ccc; }
-      .section { break-inside: avoid; }
-    }
-  </style>
-  <style id="public-apple-theme">
-    body {
-      color: #1d1d1f;
-      background: #f5f5f7;
-      background-image: none;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-    body::before { display: none; }
-    .topbar {
-      min-height: 52px;
-      padding: 0 max(20px, calc((100vw - 1200px) / 2));
-      background: rgba(255, 255, 255, .88);
-      border-bottom: 1px solid #d2d2d7;
-      color: #1d1d1f;
-      backdrop-filter: saturate(180%) blur(20px);
-    }
-    .brand { gap: 9px; }
-    .brand-mark { width: 25px; height: 25px; border: 0; border-radius: 7px; background: #1d1d1f; color: #fff; font-size: 9px; }
-    .brand-name { color: #1d1d1f; font-size: 13px; }
-    .brand-sub { color: #6e6e73; font-size: 11px; }
-    .top-nav { display: flex; align-items: center; gap: 24px; margin-left: auto; margin-right: 18px; }
-    .top-nav a { color: #424245; font-size: 12px; text-decoration: none; }
-    .top-nav a:hover { color: #0071e3; }
-    .system-readout { max-width: none; color: #6e6e73; font-size: 11px; }
-    .system-readout span { overflow: visible; }
-    .main-grid { display: block; max-width: none; }
-    .sidebar { display: none; }
-    .content { max-width: 1200px; margin: 0 auto; padding: 78px 40px 120px; }
-    .section { padding-top: 104px; scroll-margin-top: 76px; }
-    .section:first-child { padding-top: 0; }
-    .overline { color: #6e6e73; font-size: 11px; letter-spacing: .12em; }
-    h1 { max-width: 890px; margin: 12px 0 20px; color: #1d1d1f; font-size: clamp(42px, 6vw, 78px); font-weight: 700; line-height: 1.04; letter-spacing: -.045em; }
-    h2 { color: #1d1d1f; font-size: 42px; font-weight: 700; letter-spacing: -.035em; }
-    h3 { color: #1d1d1f; font-weight: 600; }
-    .blue { color: #0071e3; }
-    .lede { max-width: 760px; color: #6e6e73; font-size: 18px; line-height: 1.55; }
-    .section-note { color: #6e6e73; font-size: 13px; }
-    .terminal-strip { margin-top: 38px; padding: 15px 0; color: #6e6e73; background: transparent; border: 0; border-top: 1px solid #d2d2d7; border-bottom: 1px solid #d2d2d7; font: 12px/1.4 -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
-    .terminal-strip strong { color: #1d1d1f; }
-    .panel { background: #fff; border: 1px solid #e5e5ea; border-radius: 22px; box-shadow: 0 12px 30px rgba(0, 0, 0, .055); }
-    .panel-pad, .data-card, .chart-panel { padding: 24px; }
-    .metric { min-height: 158px; padding: 24px; border-top: 0; }
-    .metric-label, .chart-unit, .note, .metric-foot, .section-note { color: #6e6e73; }
-    .metric-value { color: #1d1d1f; font-size: 37px; letter-spacing: -.04em; }
-    .up { color: #188038; }
-    .down { color: #d70015; }
-    .amber { color: #b25000; }
-    .blue { color: #0071e3; }
-    .signal-tag { color: #0071e3; border: 1px solid #b7d7f7; border-radius: 999px; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; }
-    .signal-row { border-bottom-color: #e5e5ea; }
-    .signal-code { color: #86868b; }
-    .signal-name, .signal-value { color: #1d1d1f; }
-    .readout { background: #fbfbfd; border: 0; border-top: 2px solid #ff9f0a; border-radius: 22px; }
-    .readout h3 { color: #1d1d1f; }
-    .readout p { color: #6e6e73; }
-    select, .tab-button { color: #1d1d1f; border: 1px solid #d2d2d7; background: #fff; border-radius: 999px; padding: 9px 14px; }
-    .tab-button { color: #424245; }
-    .tab-button:hover, .tab-button.active { color: #fff; background: #1d1d1f; border-color: #1d1d1f; }
-    .tab-button.active::before { content: ""; }
-    .bar-track { height: 10px; background: #e5e5ea; border: 0; border-radius: 999px; }
-    .bar-fill { background: #0071e3; border-radius: 999px; }
-    .bar-fill.coral { background: #ff3b30; }
-    .bar-fill.amber { background: #ff9f0a; }
-    .bar-fill.blue { background: #5e5ce6; }
-    .bar-value, td strong { color: #1d1d1f; }
-    .mini-legend { color: #6e6e73; }
-    .legend-dot { background: #0071e3; }
-    .legend-dot.coral { background: #ff3b30; }
-    .legend-dot.amber { background: #ff9f0a; }
-    .legend-dot.blue { background: #5e5ce6; }
-    th { color: #6e6e73; }
-    td { color: #424245; border-bottom-color: #e5e5ea; }
-    tr:hover td { background: #f5f5f7; }
-    .price-stat { background: #f5f5f7; border: 0; border-top: 2px solid #0071e3; border-radius: 16px; }
-    .price-stat:nth-child(2) { border-top-color: #5e5ce6; }
-    .price-stat:nth-child(3) { border-top-color: #ff9f0a; }
-    .price-stat p { color: #6e6e73; }
-    .price-emphasis { color: #0071e3; }
-    .model-detail { background: #fbfbfd; border: 1px solid #e5e5ea; border-radius: 22px; }
-    .model-detail .model-name { color: #0071e3; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; font-size: 28px; }
-    .model-detail p { color: #6e6e73; }
-    .meter-track { background: #e5e5ea; border-radius: 999px; }
-    .meter-fill { background: #0071e3; border-radius: 999px; }
-    .model-table tbody tr.selected td { color: #1d1d1f; background: #f0f7ff; }
-    .model-table tbody tr.selected td:first-child { border-left-color: #0071e3; }
-    .eco-card { min-height: 132px; padding: 20px; border: 1px solid #e5e5ea; border-radius: 18px; background: #fff; }
-    .eco-card .eco-value { color: #0071e3; font-size: 30px; letter-spacing: -.04em; }
-    .eco-card .eco-label { color: #424245; }
-    .eco-card .eco-date { color: #86868b; }
-    .chain { gap: 12px; }
-    .chain-step { min-height: 158px; padding: 21px; border: 1px solid #e5e5ea; border-radius: 20px; background: #fff; }
-    .chain-step + .chain-step { border-left: 1px solid #e5e5ea; }
-    .chain-step + .chain-step::before { color: #0071e3; background: #f5f5f7; }
-    .chain-index { color: #86868b; }
-    .chain-step h3 { color: #1d1d1f; }
-    .chain-step p { color: #6e6e73; }
-    .source-list li { border-bottom-color: #e5e5ea; }
-    .source-list span { color: #6e6e73; }
-    a { color: #0071e3; }
-    .footer { color: #86868b; }
-    @media (max-width: 900px) {
-      .top-nav { gap: 13px; margin-right: 8px; }
-      .system-readout { display: none; }
-      .content { padding-top: 58px; }
-      h2 { font-size: 34px; }
-    }
-    @media (max-width: 1350px) {
-      .system-readout { display: none; }
-    }
-    @media (max-width: 760px) {
-      .top-nav { display: none; }
-      .content { padding: 46px 18px 80px; }
-      .section { padding-top: 72px; }
-      h1 { font-size: 47px; }
-      h2 { font-size: 32px; }
-      .lede { font-size: 16px; }
-      .terminal-strip { display: grid; gap: 8px; }
-      .panel, .metric, .data-card, .panel-pad { border-radius: 18px; }
-    }
-  </style>
+  .toc{display:none}
+  @media (min-width:1180px){
+    .toc{display:block;position:fixed;top:140px;left:calc(50% - 728px);width:200px;
+      font-size:12.5px;line-height:2.1;color:var(--gray)}
+    .toc .toc-title{font-size:11px;letter-spacing:.14em;color:var(--light-gray);
+      text-transform:uppercase;margin-bottom:6px}
+    .toc a{display:block;border-bottom:none;color:var(--gray);padding-left:10px;
+      border-left:2px solid transparent;transition:all .15s}
+    .toc a:hover{color:var(--text)}
+    .toc a.active{color:var(--text);border-left-color:var(--text)}
+  }
+
+  .page{max-width:680px;margin:0 auto;padding:72px 24px 96px}
+  .kicker{font-size:12.5px;letter-spacing:.22em;color:var(--gray);
+    text-transform:uppercase;margin-bottom:18px}
+  h1{font-size:38px;line-height:1.28;font-weight:800;margin:0 0 12px;
+    letter-spacing:-.01em;color:#111}
+  .byline{font-size:14.5px;color:var(--gray);margin-bottom:4px}
+  .byline b{color:var(--text);font-weight:600}
+  .date-line{font-size:13px;color:var(--light-gray);margin-bottom:34px}
+
+  .abstract{font-size:15.5px;color:var(--gray);border-top:1px solid var(--hair);
+    border-bottom:1px solid var(--hair);padding:20px 2px;margin:34px 0 8px}
+  .abstract b{color:var(--text);font-weight:600}
+
+  h2{font-size:25px;font-weight:800;margin:64px 0 6px;color:#111;
+    letter-spacing:-.01em;scroll-margin-top:24px}
+  .h2-sub{font-size:14px;color:var(--gray);margin:0 0 26px}
+  h3{font-size:18px;font-weight:700;margin:38px 0 10px;color:#111}
+  p{margin:0 0 18px}
+  .num-tag{color:var(--light-gray);font-weight:600;font-size:.85em;margin-right:8px}
+  em{font-style:normal;background:linear-gradient(transparent 62%,#f3e9c9 62%)}
+  .up{color:#b03a2e;font-weight:600}
+  .down{color:#1e7d4f;font-weight:600}
+
+  figure{margin:40px 0}
+  figure svg{display:block;width:100%;height:auto;max-width:100%}
+  figcaption{font-size:13.5px;line-height:1.65;color:var(--gray);margin-top:12px}
+  figcaption b{color:var(--text);font-weight:700}
+  figcaption .src{color:var(--light-gray)}
+
+  .tbl{margin:30px 0;overflow-x:auto}
+  .tbl table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.55}
+  .tbl th{border-top:2px solid #111;border-bottom:1px solid #111;
+    padding:9px 12px;text-align:left;font-weight:700;white-space:nowrap}
+  .tbl td{border-bottom:1px solid var(--hair);padding:9px 12px;vertical-align:top}
+  .tbl tr:last-child td{border-bottom:2px solid #111}
+  .tbl .cap{font-size:13.5px;color:var(--gray);margin-top:10px}
+  .tbl .em{font-weight:700;color:var(--text)}
+
+  .metric-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:24px 0}
+  .metric{border-top:2px solid #111;padding:14px 2px}
+  .metric .ml{font-size:11px;letter-spacing:.08em;color:var(--gray);text-transform:uppercase}
+  .metric .mv{font-size:26px;font-weight:700;margin:6px 0 2px}
+  .metric .mf{font-size:12px;color:var(--gray)}
+  @media (max-width:640px){.metric-row{grid-template-columns:1fr}}
+
+  .refs{margin-top:64px;border-top:1px solid var(--hair);padding-top:24px;font-size:13.5px;color:var(--gray)}
+  .refs h2{font-size:20px;margin:0 0 14px}
+  .refs ol{margin:0;padding-left:20px}
+  .refs li{margin-bottom:10px;word-break:break-all}
+  .foot{max-width:680px;margin:0 auto;padding:0 24px 64px;font-size:12.5px;color:var(--light-gray)}
+  @media (max-width:640px){.page{padding:48px 20px 72px}h1{font-size:30px}}
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand"><div class="brand-mark">ZAI</div><div class="brand-name">智谱 AI</div><div class="brand-sub">公开数据报告</div></div>
-      <nav class="top-nav" aria-label="主要导航"><a href="#signal">总览</a><a href="#finance">财务</a><a href="#pricing">定价</a><a href="#models">模型</a><a href="#developers">开发者</a><a href="#capital">资本</a></nav>
-      <div class="system-readout"><span>公开资料摘要</span><span>2026 年 8 月</span></div>
-    </header>
 
-    <div class="main-grid">
-      <aside class="sidebar">
-        <div class="side-label">MODULES</div>
-        <nav class="side-nav" aria-label="报告模块">
-          <a href="#signal">总览 <small>00</small></a>
-          <a href="#finance">财务脉冲 <small>01</small></a>
-          <a href="#pricing">价格矩阵 <small>02</small></a>
-          <a href="#models">模型产品线 <small>03</small></a>
-          <a href="#developers">开发者网络 <small>04</small></a>
-          <a href="#capital">资本与 IPO <small>05</small></a>
-          <a href="#evidence">事实链条 <small>06</small></a>
-          <a href="#sources">来源校验 <small>07</small></a>
-        </nav>
-      </aside>
+<nav class="toc" id="toc">
+  <div class="toc-title">目录</div>
+  <a href="#overview">总览</a>
+  <a href="#finance">一 · 财务脉冲</a>
+  <a href="#pricing">二 · 价格矩阵</a>
+  <a href="#models">三 · 模型产品线</a>
+  <a href="#developers">四 · 开发者网络</a>
+  <a href="#capital">五 · 资本与 IPO</a>
+  <a href="#chain">六 · 业务事实链条</a>
+  <a href="#refs">数据来源</a>
+</nav>
 
-      <main class="content">
-        <section class="section" id="signal">
-          <div class="overline">ZHIPU AI / PUBLIC REPORT</div>
-          <h1>智谱 AI<br><span class="blue">公开数据报告</span></h1>
-          <p class="lede">一份面向公开传播的智谱 AI 数据报告，汇总 2022–2025 财务表现、模型产品线、国内外价格、Coding Plan、开发者生态以及 IPO 与融资资料。</p>
-          <div class="terminal-strip"><span><strong>范围</strong> / 财务 · 定价 · 模型 · 开发者 · 资本</span><span><strong>资料时点</strong> / 2026 年 8 月</span></div>
-          <div class="grid metrics">
-            <div class="panel metric"><div class="metric-label">2025 TOTAL REVENUE</div><div class="metric-value">¥7.24<span class="metric-foot"> 亿</span></div><div class="metric-foot up">+131.9% YoY</div></div>
-            <div class="panel metric"><div class="metric-label">OPEN PLATFORM / API</div><div class="metric-value">¥1.90<span class="metric-foot"> 亿</span></div><div class="metric-foot up">+292.6% YoY · 26.3%</div></div>
-            <div class="panel metric"><div class="metric-label">GROSS MARGIN</div><div class="metric-value">41.0<span class="metric-foot">%</span></div><div class="metric-foot down">2024: 56.3% · -15.3pp</div></div>
-            <div class="panel metric"><div class="metric-label">R&D EXPENSE</div><div class="metric-value">¥31.80<span class="metric-foot"> 亿</span></div><div class="metric-foot amber">+44.9% YoY</div></div>
-          </div>
-          <div class="grid signal-grid">
-            <div class="panel panel-pad">
-              <div class="signal-title"><h3>KEY SIGNALS / 事实信号</h3><span class="signal-tag">LIVE SNAPSHOT</span></div>
-              <div class="signal-list">
-                <div class="signal-row"><span class="signal-code">F01</span><span class="signal-name">2025 年净亏损</span><span class="signal-value down">¥47.18 亿</span></div>
-                <div class="signal-row"><span class="signal-code">F02</span><span class="signal-name">2025 年经调整净亏损</span><span class="signal-value down">¥31.82 亿</span></div>
-                <div class="signal-row"><span class="signal-code">P01</span><span class="signal-name">API 毛利率</span><span class="signal-value amber">18.9%</span></div>
-                <div class="signal-row"><span class="signal-code">D01</span><span class="signal-name">Coding Plan 付费开发者</span><span class="signal-value up">24.2 万</span></div>
-              </div>
-            </div>
-            <div class="panel readout"><h3>事实观察</h3><p>收入、模型迭代和开发者采用同步扩张；与此同时，云端业务毛利率明显低于本地化部署，研发与算力投入仍然很重。</p><p>公开业务资料显示，模型能力通过 API、订阅、企业部署和开发者工具被多层次变现。</p></div>
-          </div>
-        </section>
+<div class="page">
 
-        <section class="section" id="finance">
-          <div class="section-head"><div><div class="overline">01 / FINANCE PULSE</div><h2>财务脉冲</h2></div><p class="section-note">2022–2025 连续序列与 2024–2025 结构拆分；金额单位为人民币亿元。</p></div>
-          <div class="panel panel-pad">
-            <div class="toolbar"><div><span class="control-label">年份窗口：</span><select id="finance-year" aria-label="选择财务年份"><option value="2025">2025</option><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option></select></div><span class="note">柱形高度按同一年度口径相对比较</span></div>
-            <div class="grid two">
-              <div class="chart-panel" style="padding:0"><div class="chart-head"><h3 id="finance-chart-title">2025 财务指标</h3><span class="chart-unit">¥ / 亿元</span></div><div id="finance-bars" class="bar-chart"></div><div class="mini-legend"><span><i class="legend-dot"></i>收入</span><span><i class="legend-dot coral"></i>研发费用</span><span><i class="legend-dot amber"></i>净亏损</span></div></div>
-              <div class="data-grid"><table><thead><tr><th>指标</th><th id="finance-table-year">2025</th><th>对比/备注</th></tr></thead><tbody id="finance-table"></tbody></table></div>
-            </div>
-          </div>
-          <div class="grid two" style="margin-top:12px">
-            <div class="panel data-card"><h3>部署方式 / 2024–2025</h3><div class="data-grid"><table><thead><tr><th>方式</th><th>2024 收入</th><th>2025 收入</th><th>增速</th><th>2025 占比</th></tr></thead><tbody><tr><td><strong>本地化部署</strong></td><td>2.64</td><td>5.34</td><td class="up">+102.3%</td><td>73.7%</td></tr><tr><td><strong>云端部署</strong></td><td>0.48</td><td>1.90</td><td class="up">+292.6%</td><td>26.3%</td></tr></tbody></table></div><p class="note">云端部署收入对应开放平台及 API 业务口径。</p></div>
-            <div class="panel data-card"><h3>部署毛利率 / 2024–2025</h3><div class="data-grid"><table><thead><tr><th>方式</th><th>2024</th><th>2025</th><th>变化</th></tr></thead><tbody><tr><td><strong>云端部署</strong></td><td>3.3%</td><td>18.9%</td><td class="up">+15.6pp</td></tr><tr><td><strong>本地化部署</strong></td><td>66.0%</td><td>48.8%</td><td class="down">-17.2pp</td></tr><tr><td><strong>整体</strong></td><td>56.3%</td><td>41.0%</td><td class="down">-15.3pp</td></tr></tbody></table></div><p class="note"><strong>成本事实：</strong>公开年度资料披露 2024 年算力成本 15.53 亿元，占研发总开支 70.7%；2025 年销售成本 4.28 亿元，同比 +213.3%。</p></div>
-          </div>
-          <div class="panel data-card" style="margin-top:12px"><h3>业务产品线 / 2024–2025</h3><div class="data-grid"><table><thead><tr><th>业务线</th><th>2024 收入</th><th>2025 收入</th><th>增速</th><th>占比</th><th>2025 毛利率</th></tr></thead><tbody><tr><td><strong>企业级通用大模型</strong></td><td>2.15</td><td>3.66</td><td>+70.5%</td><td>50.4%</td><td>47.0%</td></tr><tr><td><strong>开放平台及 API</strong></td><td>0.48</td><td>1.90</td><td class="up">+292.6%</td><td>26.3%</td><td>18.9%</td></tr><tr><td><strong>企业级智能体</strong></td><td>0.47</td><td>1.66</td><td>+248.8%</td><td>22.9%</td><td>52.3%</td></tr><tr><td><strong>技术服务及其他</strong></td><td>0.02</td><td>0.03</td><td>+31.6%</td><td>0.4%</td><td>92.0%</td></tr></tbody></table></div></div>
-        </section>
+  <div class="kicker">公开数据报告 · 智谱 AI</div>
+  <h1>智谱 AI：算力资源配置与算力服务定价</h1>
+  <div class="byline">素材时点 <b>2026 年 8 月</b> · 南开大学经济学院 · 陈汇元整理</div>
+  <div class="date-line">网页重制 2026 年 10 月 10 日（北京时间）· 风格参考 distill.pub</div>
 
-        <section class="section" id="pricing">
-          <div class="section-head"><div><div class="overline">02 / PRICE MATRIX</div><h2>价格矩阵</h2></div><p class="section-note">价格按国内 API、海外 API、增值服务和 Coding Plan 分层浏览；各组使用其原始计价单位。</p></div>
-          <div class="panel panel-pad">
-            <div class="toolbar"><div class="tab-row" role="tablist" aria-label="价格类别"><button class="tab-button active" type="button" data-price-view="domestic">国内 API</button><button class="tab-button" type="button" data-price-view="overseas">海外 z.ai</button><button class="tab-button" type="button" data-price-view="services">增值服务</button><button class="tab-button" type="button" data-price-view="coding">Coding Plan</button></div><span id="price-unit" class="note">人民币 / 百万 tokens</span></div>
-            <div class="grid price-layout"><div class="data-grid price-table"><table><thead id="price-head"></thead><tbody id="price-body"></tbody></table></div><div class="price-side"><div class="price-stat"><h3>计价形态</h3><p id="price-readout">输入、输出、缓存命中分别计价；Batch API 通常为标准价格五折。</p></div><div class="price-stat"><h3>产品跨度</h3><p>公开价格资料覆盖 GLM-4 系列、GLM-5 系列、海外 z.ai、微调、私有化和开发者订阅。</p></div><div class="price-stat"><h3>价格变动</h3><p>公开资料记录 API 调用价格较 2025 年底提高 83%；Coding Plan 另记录 2026 年 2 月 +30% 和 7 月 +130% 至 +261%。</p></div></div></div>
-            <p class="note" id="price-note" style="margin:14px 0 0"></p>
-          </div>
-        </section>
-
-        <section class="section" id="models">
-          <div class="section-head"><div><div class="overline">03 / MODEL PRODUCT LINE</div><h2>模型产品线</h2></div><p class="section-note">模型名称、参数、激活参数、上下文、训练 Token、许可和架构均来自公开资料整理。</p></div>
-          <div class="grid model-layout">
-            <div class="panel data-card model-table"><div class="toolbar"><h3 style="margin:0">GLM 演进时间线</h3><span class="note">点击行查看字段</span></div><div class="data-grid"><table><thead><tr><th>模型</th><th>时间</th><th>总参数</th><th>激活参数</th><th>上下文</th><th>许可</th></tr></thead><tbody id="model-body"></tbody></table></div></div>
-            <aside id="model-detail" class="model-detail" aria-live="polite"></aside>
-          </div>
-          <div class="grid three" style="margin-top:12px"><div class="panel data-card"><h3>GLM-5 架构字段</h3><p class="note">256 个专家（MoE）、80 层、Muon Split 优化器、MLA-256 注意力机制、动态稀疏注意力。</p></div><div class="panel data-card"><h3>部署字段</h3><p class="note">公开资料披露动态稀疏注意力使部署成本降低 50%，并原生适配七大国产芯片平台。</p></div><div class="panel data-card"><h3>产品跨度</h3><p class="note">从 GLM-4-Plus、GLM-4.5、GLM-4.6、GLM-4.7 到 GLM-5、GLM-5.1、GLM-5.2 和 GLM-5-Turbo。</p></div></div>
-        </section>
-
-        <section class="section" id="developers">
-          <div class="section-head"><div><div class="overline">04 / DEVELOPER NETWORK</div><h2>开发者网络</h2></div><p class="section-note">用不同视图查看平台规模、调用强度、订阅商业化与生态嵌入；每个数字保留其披露时间点。</p></div>
-          <div class="panel panel-pad">
-            <div class="toolbar"><div class="tab-row eco-tabs" role="tablist" aria-label="开发者指标类别"><button class="tab-button active" type="button" data-eco-view="scale">规模</button><button class="tab-button" type="button" data-eco-view="usage">使用强度</button><button class="tab-button" type="button" data-eco-view="commercial">商业化</button><button class="tab-button" type="button" data-eco-view="integration">生态嵌入</button></div><span class="note">公开资料口径</span></div>
-            <div id="eco-cards" class="grid eco-cards"></div>
-          </div>
-          <div class="grid two" style="margin-top:12px"><div class="panel data-card"><h3>公开运营指标</h3><div class="data-grid"><table><thead><tr><th>指标</th><th>数据</th><th>时间</th></tr></thead><tbody><tr><td>日均 Token 消耗</td><td>5 亿 → 4.6 万亿</td><td>2022 → 2025 上半年</td></tr><tr><td>MaaS 平台 ARR</td><td>约 17 亿元</td><td>2026 年 3 月，12 个月增长 60 倍</td></tr><tr><td>GLM Coding Plan ARR</td><td>超过 1 亿元</td><td>上线 2 个月</td></tr><tr><td>Token 调用量（编程套餐）</td><td>增长 15 倍</td><td>2025–2026 年 6 个月</td></tr><tr><td>付费 Token 流量</td><td>公开表述为超过所有国产模型之和</td><td>公开运营资料</td></tr></tbody></table></div></div><div class="panel data-card integrity"><h3>数据说明</h3><p class="note">开发者、企业客户、设备覆盖和模型下载等指标的统计对象与时间点并不完全相同，本文分别按公开披露名称呈现，不将不同指标相加或互相替代。</p><p class="note">部分运营数据为公司公开表述，阅读时应以对应年度报告、上市文件或官方页面的最新版本为准。</p></div></div>
-        </section>
-
-        <section class="section" id="capital">
-          <div class="section-head"><div><div class="overline">05 / CAPITAL & IPO</div><h2>资本与 IPO</h2></div><p class="section-note">以下为公开上市资料中的上市、募资和资本背景字段；不延伸为估值判断。</p></div>
-          <div class="grid metrics"><div class="panel metric"><div class="metric-label">HKEX TICKER</div><div class="metric-value">02513<span class="metric-foot">.HK</span></div><div class="metric-foot">港交所主板</div></div><div class="panel metric"><div class="metric-label">IPO ISSUE PRICE</div><div class="metric-value">116.20<span class="metric-foot"> HKD</span></div><div class="metric-foot">每股发行价</div></div><div class="panel metric"><div class="metric-label">IPO RAISE</div><div class="metric-value">¥43<span class="metric-foot"> 亿港元</span></div><div class="metric-foot">发行 3,741.95 万股 H 股</div></div><div class="panel metric"><div class="metric-label">CORNERSTONE</div><div class="metric-value">¥29.8<span class="metric-foot"> 亿港元</span></div><div class="metric-foot">约占募资近 70%</div></div></div>
-          <div class="panel data-card" style="margin-top:12px"><div class="data-grid"><table><thead><tr><th>项目</th><th>公开资料</th><th>口径说明</th></tr></thead><tbody><tr><td><strong>上市日期</strong></td><td>2026 年 1 月 8 日</td><td>港交所主板</td></tr><tr><td><strong>IPO 市值</strong></td><td>约 511 亿港元</td><td>发行时点汇总值</td></tr><tr><td><strong>募资用途</strong></td><td>70% 用于通用 AI 大模型研发，约 29 亿港元；10% 用于 MaaS 平台优化，约 4.2 亿港元</td><td>募集资金用途结构</td></tr><tr><td><strong>IPO 前融资</strong></td><td>8 轮，累计超过 83 亿元人民币</td><td>融资背景</td></tr><tr><td><strong>主要投资方</strong></td><td>美团、蚂蚁、阿里、腾讯、小米、金山、君联资本、红杉、高瓴、启明创投等</td><td>上市资料列示</td></tr><tr><td><strong>行业排名</strong></td><td>2024 年中国独立通用大模型开发商收入第一，市场份额 6.6%</td><td>公开市场资料</td></tr><tr><td><strong>上市首日市值</strong></td><td>约 4,079 亿港元；公开汇总同时记录收涨 31.94%、报 915 港元</td><td>时间标注为 2026.04.01</td></tr></tbody></table></div></div>
-        </section>
-
-        <section class="section" id="evidence">
-          <div class="section-head"><div><div class="overline">06 / FACT CHAIN</div><h2>业务事实链条</h2></div><p class="section-note">这是公开资料之间的事实关联，不把相关关系表述为已识别的因果关系。</p></div>
-          <div class="chain"><div class="chain-step"><div class="chain-index">01 / INPUT</div><h3>研发与训练</h3><p>研发费用 31.80 亿元；2024 年算力成本 15.53 亿元，占研发总开支 70.7%。</p></div><div class="chain-step"><div class="chain-index">02 / PRODUCT</div><h3>模型产品</h3><p>模型从 GLM-4.5 演进到 GLM-5.2，参数、上下文和架构字段持续扩展。</p></div><div class="chain-step"><div class="chain-index">03 / PRICE</div><h3>多层价格</h3><p>国内 API、海外 API、订阅、微调、私有实例和年套餐并行存在。</p></div><div class="chain-step"><div class="chain-index">04 / USAGE</div><h3>开发者采用</h3><p>平台注册用户、Coding Plan 付费开发者、Token 流量和 ARR 均已披露。</p></div><div class="chain-step"><div class="chain-index">05 / MARGIN</div><h3>财务结果</h3><p>API 收入增速 292.6%，但云端/API 毛利率 18.9%，整体毛利率 41.0%。</p></div></div>
-          <div class="panel panel-pad" style="margin-top:12px"><div class="grid two"><div><h3>中性事实观察 A</h3><p class="note">收入结构同时包含企业级通用大模型、开放平台及 API、企业级智能体和技术服务；云端收入增速最高，但 2025 年云端毛利率仍低于本地化部署。</p></div><div><h3>中性事实观察 B</h3><p class="note">价格体系从低价/免费模型到前沿模型、Coding Plan 和私有化套餐分层，说明同一模型能力通过不同服务形态被定价。</p></div></div></div>
-        </section>
-
-        <section class="section" id="sources">
-          <div class="section-head"><div><div class="overline">07 / SOURCE CHECK</div><h2>来源校验</h2></div><p class="section-note">本页面以智谱年度报告、上市文件和官方产品页面为主要公开资料来源。</p></div>
-          <div class="grid two"><div class="panel panel-pad"><h3>数据说明</h3><ul class="source-list"><li><strong>公开资料范围</strong><span>智谱年度报告、香港联交所上市文件、开放平台价格页、GLM Coding Plan 页面及公开市场资料。</span></li><li><strong>时间口径</strong><span>财务数据以年度报告为主，价格与运营指标为公开页面快照；价格和套餐可能持续调整。</span></li><li><strong>呈现内容</strong><span>页面呈现公开数据、指标对比和事实观察，未加入未公开信息。</span></li></ul></div><div class="panel panel-pad"><h3>官方入口</h3><ul class="source-list"><li><a href="https://www.zhipuai.cn/investor_relations/2025%E5%B9%B4%E6%8A%A5.pdf" target="_blank" rel="noreferrer">智谱 2025 年度报告</a><span>财务、业务和生态披露</span></li><li><a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1230/2025123000018_c.pdf" target="_blank" rel="noreferrer">香港联交所招股书</a><span>模型与上市文件资料</span></li><li><a href="https://open.bigmodel.cn/pricing" target="_blank" rel="noreferrer">智谱开放平台价格页</a><span>国内 API、微调、私有化</span></li><li><a href="https://open.bigmodel.cn/glm-coding" target="_blank" rel="noreferrer">GLM Coding Plan</a><span>开发者套餐</span></li><li><a href="https://openrouter.ai/rankings" target="_blank" rel="noreferrer">OpenRouter Rankings</a><span>补充性外部市场页面</span></li></ul></div></div>
-          <div class="footer">资料时点：2026 年 8 月 · 价格、运营指标和网页页面可能继续变化 · 仅供公开研究与信息参考，不构成投资建议。</div>
-        </section>
-      </main>
-    </div>
+  <div class="abstract">
+    <b>摘要</b> — 本报告汇总智谱 AI 2022–2025 年财务表现、模型产品线、国内外价格、Coding Plan、开发者生态与 IPO 资料。核心事实：2025 年总收入 7.24 亿元（+131.9%），但净亏损 47.18 亿元、研发费用 31.80 亿元；收入结构由企业级通用大模型、开放平台及 API、企业级智能体构成，其中云端/API 收入增速最高（+292.6%）但毛利率仅 18.9%。算力成本在研发开支中占比极高（2024 年 70.7%），是平台经济中「算力资源配置—服务定价—财务结果」链条的关键约束。
   </div>
 
-  <script>
-    const financeData = {
-      "2022": { revenue: 0.57, rd: 0.84, loss: 1.43, gross: "—", adjusted: "—", yoy: "—", eps: "—" },
-      "2023": { revenue: 1.25, rd: 5.29, loss: 7.88, gross: "—", adjusted: "—", yoy: "117%", eps: "—" },
-      "2024": { revenue: 3.12, rd: 21.95, loss: 29.58, gross: "56.3%", adjusted: 24.66, yoy: "150%", eps: "8.72" },
-      "2025": { revenue: 7.24, rd: 31.80, loss: 47.18, gross: "41.0%", adjusted: 31.82, yoy: "131.9%", eps: "12.03" }
-    };
+  <!-- ===== 总览 ===== -->
+  <h2 id="overview"><span class="num-tag">§0</span>总览：四个关键数字</h2>
+  <p class="h2-sub">2025 年收入、API、毛利率与研发投入的断面</p>
+  <div class="metric-row">
+    <div class="metric"><div class="ml">2025 总收入</div><div class="mv">¥7.24 亿</div><div class="mf up">同比 +131.9%</div></div>
+    <div class="metric"><div class="ml">开放平台 / API</div><div class="mv">¥1.90 亿</div><div class="mf up">+292.6% · 占 26.3%</div></div>
+    <div class="metric"><div class="ml">整体毛利率</div><div class="mv">41.0%</div><div class="mf down">2024: 56.3% · -15.3pp</div></div>
+    <div class="metric"><div class="ml">研发费用</div><div class="mv">¥31.80 亿</div><div class="mf">同比 +44.9%</div></div>
+  </div>
+  <p>收入、模型迭代与开发者采用同步扩张；与此同时，<em>云端业务毛利率明显低于本地化部署</em>，研发与算力投入仍然很重。公开资料显示，模型能力通过 API、订阅、企业部署与开发者工具被多层次变现。值得注意的事实信号：2025 年净亏损 47.18 亿元、经调整净亏损 31.82 亿元；API 毛利率 18.9%；Coding Plan 付费开发者 24.2 万。</p>
 
-    function renderFinance(year) {
-      const d = financeData[year];
-      const max = Math.max(d.revenue, d.rd, d.loss);
-      document.getElementById("finance-chart-title").textContent = `${year} 财务指标`;
-      document.getElementById("finance-table-year").textContent = year;
-      const bars = [
-        ["营业收入", d.revenue, ""],
-        ["研发费用", d.rd, "coral"],
-        ["净亏损", d.loss, "amber"]
-      ];
-      document.getElementById("finance-bars").innerHTML = bars.map(([label, value, color]) => `<div class="bar-row"><div class="bar-label">${label}</div><div class="bar-track"><div class="bar-fill ${color}" style="width:${(value / max * 100).toFixed(2)}%"></div></div><div class="bar-value">${value.toFixed(2)}</div></div>`).join("");
-      const rows = [
-        ["营业收入", `${d.revenue.toFixed(2)} 亿`, d.yoy === "—" ? "—" : `同比 ${d.yoy}`],
-        ["研发费用", `${d.rd.toFixed(2)} 亿`, year === "2025" ? "同比 +44.9%" : ""],
-        ["净亏损", `${d.loss.toFixed(2)} 亿`, year === "2025" ? "同比 +59.5%" : ""],
-        ["毛利率", d.gross, year === "2025" ? "2024: 56.3%" : ""],
-        ["经调整净亏损", d.adjusted === "—" ? "—" : `${d.adjusted.toFixed(2)} 亿`, ""],
-        ["每股亏损", d.eps === "—" ? "—" : `${d.eps} 元`, ""]
-      ];
-      document.getElementById("finance-table").innerHTML = rows.map(row => `<tr><td><strong>${row[0]}</strong></td><td class="mono">${row[1]}</td><td>${row[2]}</td></tr>`).join("");
-    }
-    document.getElementById("finance-year").addEventListener("change", (event) => renderFinance(event.target.value));
-    renderFinance("2025");
+  <!-- ===== 财务 ===== -->
+  <h2 id="finance"><span class="num-tag">§1</span>财务脉冲：2022–2025 连续序列</h2>
+  <p class="h2-sub">金额单位为人民币亿元；毛利率为百分比</p>
 
-    const priceData = {
-      domestic: {
-        unit: "人民币 / 百万 tokens",
-        readout: "公开价格页同时呈现输入、输出和缓存命中价格；历史公开资料提供 GLM-4 系列单价与 Batch 五折价格。",
-        note: "公开价格资料：GLM-4-Plus 5.00；GLM-4-Air-250414 0.50；GLM-4-AirX 10.00；GLM-4-Long 1.00；GLM-4-Assistant 5.00；GLM-Z1-Air 0.50；GLM-Z1-AirX 5.00；GLM-Z1-FlashX 0.10；GLM-4-FlashX-250414 0.10；GLM-4-Flash-250414 与 GLM-Z1-Flash 免费。现行公开价格页快照：GLM-5.2 输入 8、输出 28、缓存 2；GLM-5 输入 4–6、输出 18–22；GLM-4.7-Flash 免费。",
-        columns: ["模型", "输入", "输出", "缓存 / Batch", "上下文 / 备注"],
-        rows: [
-          ["GLM-5.2", "¥8", "¥28", "缓存 ¥2", "前沿模型"],
-          ["GLM-5.1", "¥6–8", "¥24–28", "—", "版本档位"],
-          ["GLM-5-Turbo", "¥5–7", "¥22–26", "—", "Agent 场景"],
-          ["GLM-5", "¥4–6", "¥18–22", "—", "主力模型"],
-          ["GLM-4.5-Air", "¥0.8–1.2", "¥2–8", "—", "轻量模型"],
-          ["GLM-4.7-FlashX", "¥0.5", "¥3", "—", "高性价比"],
-          ["GLM-4.7-Flash", "免费", "免费", "—", "免费层"]
-        ]
-      },
-      overseas: {
-        unit: "美元 / 1M tokens",
-        readout: "z.ai 公开价格页按照输入、输出、缓存输入和上下文长度拆分价格。",
-        note: "公开海外价格资料：GLM-5.2 缓存输入 $0.01–$0.45；GLM-4.5-Flash / GLM-4.7-Flash 输入、缓存输入和输出均免费。",
-        columns: ["模型", "输入", "输出", "缓存输入", "上下文"],
-        rows: [
-          ["GLM-5.2", "$1.40", "$4.40", "$0.01–$0.45", "1M"],
-          ["GLM-5.1", "$1.40", "$4.40", "—", "—"],
-          ["GLM-5", "$1.00", "$3.20", "—", "200K"],
-          ["GLM-5-Turbo", "$1.20", "$4.00", "—", "—"],
-          ["GLM-4.7 / 4.6 / 4.5", "$0.60", "$2.20", "—", "128K–200K"],
-          ["GLM-4.5-Air", "$0.20", "$1.10", "—", "128K"],
-          ["GLM-4-32B-0414-128K", "$0.10", "$0.10", "—", "128K"],
-          ["GLM-4.5-Flash / 4.7-Flash", "免费", "免费", "免费", "—"]
-        ]
-      },
-      services: {
-        unit: "人民币或美元；按服务项目计价",
-        readout: "增值服务把搜索、知识库、图片、视频、语音、Agent、微调和私有实例拆成不同计价单位。",
-        note: "不同服务单位不能直接与 token 价格横向比较；私有实例为算力单元/天，云端私有化为年价。",
-        columns: ["服务", "价格", "单位", "服务层", "备注"],
-        rows: [
-          ["Search-Std", "¥0.01", "次", "搜索", "基础版"],
-          ["Search-Pro", "¥0.03", "次", "搜索", "Pro 版"],
-          ["Search-Pro-Sogou / Quark", "¥0.05", "次", "搜索", "渠道版本"],
-          ["知识库扩容", "¥0.04", "GB / 小时", "知识库", "存储"],
-          ["GLM-4.5 LoRA", "¥0.10", "千 tokens", "微调", "32K"],
-          ["GLM-4.5-Air LoRA", "¥0.035", "千 tokens", "微调", "32K"],
-          ["GLM-4.5 私有实例", "¥175", "算力单元 / 天", "部署", "128K-FP8"],
-          ["GLM-4.5-Air 私有实例", "¥100", "算力单元 / 天", "部署", "128K-FP8"],
-          ["GLM-4.5 云端私有化", "¥110 万", "年", "部署", "5,840 算力单元"],
-          ["GLM-4.5-Air 云端私有化", "¥50 万", "年", "部署", "5,840 算力单元"]
-        ]
-      },
-      coding: {
-        unit: "人民币 / 月；积分制另按调用类型折算",
-        readout: "Coding Plan 从旧版 V2 到 2026 年 7 月改版，国内月价、用量上限和积分抵扣方式同时变化。",
-        note: "旧版 V2 → 新版月价：Lite 49 → 118（+141%）；Pro 149 → 538（+261%）；Max 469 → 1,078（+130%）。新版以 GLM-5.2 为例，输入系数 6.9、缓存 1.7、输出 24；工作日 14–18 时按 100% 抵扣，其余时段 50%。",
-        columns: ["方案", "旧版 V2", "当前月价", "涨幅", "周 / 5 小时上限"],
-        rows: [
-          ["Lite", "¥49", "¥118（折后页显 ¥94.4）", "+141%", "10,000 / 2,000"],
-          ["Pro", "¥149", "¥538（折后页显 ¥430.4）", "+261%", "60,000 / 12,000"],
-          ["Max", "¥469", "¥1,078（折后页显 ¥862.4）", "+130%", "140,000 / 28,000"],
-          ["海外 Lite", "—", "$18", "—", "月付原价"],
-          ["海外 Pro", "—", "$72", "—", "月付原价"],
-          ["海外 Max", "—", "$160", "—", "月付原价"]
-        ]
-      }
-    };
+  <figure>
+    <div id="c_fin"></div>
+    <figcaption><b>图 1</b> — 2022–2025 年营业收入、研发费用与净亏损（亿元）。收入四年增长约 12.7 倍，但研发与亏损同步放大，呈现典型「高投入换增长」曲线。<span class="src">资料来源：智谱 2025 年度报告（原 dashboard 财务序列）。</span></figcaption>
+  </figure>
 
-    function renderPrices(view) {
-      const data = priceData[view];
-      document.getElementById("price-unit").textContent = data.unit;
-      document.getElementById("price-readout").textContent = data.readout;
-      document.getElementById("price-note").textContent = data.note;
-      document.getElementById("price-head").innerHTML = `<tr>${data.columns.map(column => `<th>${column}</th>`).join("")}</tr>`;
-      document.getElementById("price-body").innerHTML = data.rows.map(row => `<tr>${row.map((cell, index) => `<td class="${index === 0 ? "price-emphasis" : ""}">${cell}</td>`).join("")}</tr>`).join("");
-      document.querySelectorAll("[data-price-view]").forEach(button => button.classList.toggle("active", button.dataset.priceView === view));
-    }
-    document.querySelectorAll("[data-price-view]").forEach(button => button.addEventListener("click", () => renderPrices(button.dataset.priceView)));
-    renderPrices("domestic");
+  <div class="tbl">
+    <table>
+      <thead><tr><th>年份</th><th>营业收入</th><th>研发费用</th><th>净亏损</th><th>毛利率</th><th>经调整净亏损</th><th>同比</th></tr></thead>
+      <tbody>
+        <tr><td class="em">2022</td><td>0.57</td><td>0.84</td><td>1.43</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="em">2023</td><td>1.25</td><td>5.29</td><td>7.88</td><td>—</td><td>—</td><td>117%</td></tr>
+        <tr><td class="em">2024</td><td>3.12</td><td>21.95</td><td>29.58</td><td>56.3%</td><td>24.66</td><td>150%</td></tr>
+        <tr><td class="em">2025</td><td>7.24</td><td>31.80</td><td>47.18</td><td>41.0%</td><td>31.82</td><td>131.9%</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 1 — 智谱 AI 2022–2025 财务连续序列（每股收益 2024: 8.72 元，2025: 12.03 元）。<span class="src">资料来源：智谱 2025 年度报告。</span></div>
+  </div>
 
-    const models = [
-      { name: "GLM-4-Plus", date: "2025.01", total: "—", active: "—", context: "128K", license: "API", detail: "公开资料将其定位为高智能旗舰。", bars: [45, 28, 55] },
-      { name: "GLM-4.5", date: "2025.08", total: "355B", active: "32B", context: "128K", license: "MIT", detail: "公开资料记录其为开源模型，编程能力明显提升。", bars: [62, 46, 55] },
-      { name: "GLM-4.6", date: "2025.09", total: "355B", active: "32B", context: "200K", license: "MIT", detail: "上下文扩展至 200K；公开资料记录其对齐 Claude Sonnet 4，并节省 30%+ token。", bars: [66, 47, 72] },
-      { name: "GLM-4.7", date: "2025.12", total: "358B", active: "—", context: "200K", license: "MIT", detail: "公开资料记录其为 Artificial Analysis 榜单开源第一。", bars: [70, 51, 72] },
-      { name: "GLM-5", date: "2026.02", total: "744B", active: "40B", context: "200K", license: "MIT", detail: "旗舰基座；28.5 万亿训练 Token，256 专家 MoE，SWE-bench 开源 SOTA。", bars: [100, 62, 72] },
-      { name: "GLM-5.1", date: "2026.03", total: "744B", active: "—", context: "—", license: "MIT", detail: "GLM-5 迭代版本。", bars: [100, 62, 70] },
-      { name: "GLM-5.2", date: "2026.06", total: "744B", active: "—", context: "1M", license: "MIT", detail: "长程任务模型；公开资料记录其 FrontierSWE 仅低 Claude Opus 4.8 约 1%。", bars: [100, 62, 100] },
-      { name: "GLM-4.6V", date: "2025", total: "~100B", active: "—", context: "128K", license: "开源", detail: "视觉推理模型；公开资料记录其为同规模 SOTA。", bars: [60, 40, 55] },
-      { name: "GLM-5-Turbo", date: "2026", total: "—", active: "—", context: "—", license: "—", detail: "面向 Agent 场景优化，重点为工具调用。", bars: [78, 44, 60] }
-    ];
+  <h3>部署方式与毛利率结构</h3>
+  <p>收入按部署方式拆分：本地化部署 2024 年 2.64 亿 → 2025 年 5.34 亿（+102.3%，占比 73.7%）；云端部署 0.48 亿 → 1.90 亿（+292.6%，占比 26.3%）。毛利率呈现「本地化高、云端低且快速爬升」的结构——云端部署毛利率由 3.3% 升至 18.9%（+15.6pp），本地化由 66.0% 降至 48.8%（-17.2pp），整体由 56.3% 降至 41.0%。</p>
+  <p>成本端的关键事实：2024 年算力成本 15.53 亿元，占研发总开支 70.7%；2025 年销售成本 4.28 亿元，同比 +213.3%。算力资源配置，是这份财务报表里最硬的约束。</p>
 
-    function renderModels() {
-      document.getElementById("model-body").innerHTML = models.map((model, index) => `<tr data-model-index="${index}" class="${index === 6 ? "selected" : ""}"><td><strong>${model.name}</strong></td><td class="mono">${model.date}</td><td class="mono">${model.total}</td><td class="mono">${model.active}</td><td class="mono">${model.context}</td><td>${model.license}</td></tr>`).join("");
-      document.querySelectorAll("[data-model-index]").forEach(row => row.addEventListener("click", () => selectModel(Number(row.dataset.modelIndex))));
-      selectModel(6);
-    }
-    function selectModel(index) {
-      const model = models[index];
-      document.querySelectorAll("[data-model-index]").forEach(row => row.classList.toggle("selected", Number(row.dataset.modelIndex) === index));
-      document.getElementById("model-detail").innerHTML = `<div class="model-name">${model.name}</div><p>${model.detail}</p><div class="meter-list"><div class="meter"><span>PARAMETER</span><div class="meter-track"><div class="meter-fill" style="width:${model.bars[0]}%"></div></div><span>${model.total}</span></div><div class="meter"><span>ACTIVE</span><div class="meter-track"><div class="meter-fill" style="width:${model.bars[1]}%"></div></div><span>${model.active}</span></div><div class="meter"><span>CONTEXT</span><div class="meter-track"><div class="meter-fill" style="width:${model.bars[2]}%"></div></div><span>${model.context}</span></div></div>`;
-    }
-    renderModels();
+  <div class="tbl">
+    <table>
+      <thead><tr><th>业务线</th><th>2024 收入</th><th>2025 收入</th><th>增速</th><th>2025 占比</th><th>2025 毛利率</th></tr></thead>
+      <tbody>
+        <tr><td class="em">企业级通用大模型</td><td>2.15</td><td>3.66</td><td>+70.5%</td><td>50.4%</td><td>47.0%</td></tr>
+        <tr><td class="em">开放平台及 API</td><td>0.48</td><td>1.90</td><td class="up">+292.6%</td><td>26.3%</td><td>18.9%</td></tr>
+        <tr><td class="em">企业级智能体</td><td>0.47</td><td>1.66</td><td>+248.8%</td><td>22.9%</td><td>52.3%</td></tr>
+        <tr><td class="em">技术服务及其他</td><td>0.02</td><td>0.03</td><td>+31.6%</td><td>0.4%</td><td>92.0%</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 2 — 业务产品线收入与毛利率（亿元）。<span class="src">资料来源：智谱 2025 年度报告。</span></div>
+  </div>
 
-    const ecoData = {
-      scale: [["400万+", "MaaS 平台注册用户", "2026.03"], ["24.2万", "Coding Plan 付费开发者", "公开运营资料"], ["12,000+", "企业客户", "2025 Q3"], ["4,500万+", "开发者总数", "2025.09"]],
-      usage: [["4.6万亿", "日均 Token 消耗量", "2025 上半年"], ["15×", "编程套餐 Token 调用增长", "6 个月"], ["1亿行/日", "CodeGeeX 日均生成代码", "公开运营资料"], ["40万", "ClawPlan 订阅用户", "上线 20 天"]],
-      commercial: [["¥17亿", "MaaS 平台 ARR", "2026.03"], [">¥1亿", "Coding Plan ARR", "上线 2 个月"], ["+83%", "API 调用定价涨幅", "2026.02"], ["+130%–261%", "Coding Plan 7 月涨幅", "2026" ]],
-      integration: [["8,000万+", "覆盖终端设备", "2025.09"], ["40+", "兼容主流硬件芯片", "公开运营资料"], ["9 / 10", "中国前十大互联网公司深度集成", "2025"], ["218+", "覆盖国家和地区", "全球"]]
-    };
-    function renderEco(view) {
-      document.getElementById("eco-cards").innerHTML = ecoData[view].map(item => `<div class="eco-card"><div class="eco-value">${item[0]}</div><div class="eco-label">${item[1]}</div><div class="eco-date">${item[2]}</div></div>`).join("");
-      document.querySelectorAll("[data-eco-view]").forEach(button => button.classList.toggle("active", button.dataset.ecoView === view));
-    }
-    document.querySelectorAll("[data-eco-view]").forEach(button => button.addEventListener("click", () => renderEco(button.dataset.ecoView)));
-    renderEco("scale");
-  </script>
+  <!-- ===== 价格 ===== -->
+  <h2 id="pricing"><span class="num-tag">§2</span>价格矩阵：从免费层到前沿模型</h2>
+  <p class="h2-sub">国内 API（¥/百万 tokens）、海外 z.ai（$/1M tokens）、增值服务、Coding Plan</p>
+  <p>智谱的价格体系按 <em>输入、输出、缓存命中分别计价</em>，Batch API 通常为标准价五折。公开价格资料记录：API 调用价格较 2025 年底提高 83%；Coding Plan 另记录 2026 年 2 月 +30%、7 月 +130% 至 +261% 的多档上调。</p>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>模型</th><th>输入</th><th>输出</th><th>缓存/Batch</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="em">GLM-5.2</td><td>¥8</td><td>¥28</td><td>缓存 ¥2</td><td>前沿模型</td></tr>
+        <tr><td class="em">GLM-5.1</td><td>¥6–8</td><td>¥24–28</td><td>—</td><td>版本档位</td></tr>
+        <tr><td class="em">GLM-5-Turbo</td><td>¥5–7</td><td>¥22–26</td><td>—</td><td>Agent 场景</td></tr>
+        <tr><td class="em">GLM-5</td><td>¥4–6</td><td>¥18–22</td><td>—</td><td>主力模型</td></tr>
+        <tr><td class="em">GLM-4.5-Air</td><td>¥0.8–1.2</td><td>¥2–8</td><td>—</td><td>轻量模型</td></tr>
+        <tr><td class="em">GLM-4.7-FlashX</td><td>¥0.5</td><td>¥3</td><td>—</td><td>高性价比</td></tr>
+        <tr><td class="em">GLM-4.7-Flash</td><td>免费</td><td>免费</td><td>—</td><td>免费层</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 3 — 国内 API 价格（人民币 / 百万 tokens）。<span class="src">资料来源：智谱开放平台价格页（open.bigmodel.cn/pricing）。</span></div>
+  </div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th>模型</th><th>输入</th><th>输出</th><th>缓存输入</th><th>上下文</th></tr></thead>
+      <tbody>
+        <tr><td class="em">GLM-5.2</td><td>$1.40</td><td>$4.40</td><td>$0.01–$0.45</td><td>1M</td></tr>
+        <tr><td class="em">GLM-5</td><td>$1.00</td><td>$3.20</td><td>—</td><td>200K</td></tr>
+        <tr><td class="em">GLM-5-Turbo</td><td>$1.20</td><td>$4.00</td><td>—</td><td>—</td></tr>
+        <tr><td class="em">GLM-4.7 / 4.6 / 4.5</td><td>$0.60</td><td>$2.20</td><td>—</td><td>128K–200K</td></tr>
+        <tr><td class="em">GLM-4.5-Air</td><td>$0.20</td><td>$1.10</td><td>—</td><td>128K</td></tr>
+        <tr><td class="em">GLM-4-32B-0414-128K</td><td>$0.10</td><td>$0.10</td><td>—</td><td>128K</td></tr>
+        <tr><td class="em">GLM-4.5-Flash / 4.7-Flash</td><td>免费</td><td>免费</td><td>免费</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 4 — 海外 z.ai 价格（美元 / 1M tokens）。<span class="src">资料来源：z.ai 公开价格页。</span></div>
+  </div>
+
+  <p>增值服务把搜索、知识库、图片/视频/语音、Agent、微调与私有实例拆成不同计价单位——例如 Search-Std ¥0.01/次、知识库扩容 ¥0.04/GB·小时、GLM-4.5 LoRA ¥0.10/千 tokens、GLM-4.5 私有实例 ¥175/算力单元·天、GLM-4.5 云端私有化 ¥110 万/年。Coding Plan 国内月价由旧版 V2 上调至 Lite ¥118（+141%）、Pro ¥538（+261%）、Max ¥1,078（+130%）；海外 Lite $18、Pro $72、Max $160。</p>
+
+  <!-- ===== 模型 ===== -->
+  <h2 id="models"><span class="num-tag">§3</span>模型产品线：从 GLM-4 到 GLM-5.2</h2>
+  <p class="h2-sub">参数、激活参数、上下文、许可与架构均来自公开资料</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>模型</th><th>时间</th><th>总参数</th><th>激活参数</th><th>上下文</th><th>许可</th></tr></thead>
+      <tbody>
+        <tr><td class="em">GLM-4-Plus</td><td>2025.01</td><td>—</td><td>—</td><td>128K</td><td>API</td></tr>
+        <tr><td class="em">GLM-4.5</td><td>2025.08</td><td>355B</td><td>32B</td><td>128K</td><td>MIT</td></tr>
+        <tr><td class="em">GLM-4.6</td><td>2025.09</td><td>355B</td><td>32B</td><td>200K</td><td>MIT</td></tr>
+        <tr><td class="em">GLM-4.7</td><td>2025.12</td><td>358B</td><td>—</td><td>200K</td><td>MIT</td></tr>
+        <tr><td class="em">GLM-5</td><td>2026.02</td><td>744B</td><td>40B</td><td>200K</td><td>MIT</td></tr>
+        <tr><td class="em">GLM-5.1</td><td>2026.03</td><td>744B</td><td>—</td><td>—</td><td>MIT</td></tr>
+        <tr><td class="em">GLM-5.2</td><td>2026.06</td><td>744B</td><td>—</td><td>1M</td><td>MIT</td></tr>
+        <tr><td class="em">GLM-4.6V</td><td>2025</td><td>~100B</td><td>—</td><td>128K</td><td>开源</td></tr>
+        <tr><td class="em">GLM-5-Turbo</td><td>2026</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 5 — GLM 演进时间线。<span class="src">资料来源：智谱公开模型资料整理。</span></div>
+  </div>
+  <p>GLM-5 架构字段：256 个专家（MoE）、80 层、Muon Split 优化器、MLA-256 注意力机制、动态稀疏注意力。公开资料披露，动态稀疏注意力使部署成本降低 50%，并原生适配七大国产芯片平台——这正是「算力资源配置」在模型侧的工程落点。</p>
+
+  <!-- ===== 开发者 ===== -->
+  <h2 id="developers"><span class="num-tag">§4</span>开发者网络：规模、使用强度与商业化</h2>
+  <p class="h2-sub">各指标统计对象与时间点并不相同，分别按公开披露名称呈现</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>维度</th><th>指标</th><th>数据</th><th>时间</th></tr></thead>
+      <tbody>
+        <tr><td class="em">规模</td><td>MaaS 平台注册用户</td><td>400 万+</td><td>2026.03</td></tr>
+        <tr><td class="em">规模</td><td>Coding Plan 付费开发者</td><td>24.2 万</td><td>公开运营资料</td></tr>
+        <tr><td class="em">规模</td><td>企业客户</td><td>12,000+</td><td>2025 Q3</td></tr>
+        <tr><td class="em">规模</td><td>开发者总数</td><td>4,500 万+</td><td>2025.09</td></tr>
+        <tr><td class="em">使用强度</td><td>日均 Token 消耗</td><td>4.6 万亿</td><td>2025 上半年</td></tr>
+        <tr><td class="em">使用强度</td><td>编程套餐 Token 调用增长</td><td>15×</td><td>6 个月</td></tr>
+        <tr><td class="em">使用强度</td><td>CodeGeeX 日均生成代码</td><td>1 亿行/日</td><td>公开运营资料</td></tr>
+        <tr><td class="em">商业化</td><td>MaaS 平台 ARR</td><td>约 17 亿元</td><td>2026.03（12 个月增长 60 倍）</td></tr>
+        <tr><td class="em">商业化</td><td>Coding Plan ARR</td><td>超过 1 亿元</td><td>上线 2 个月</td></tr>
+        <tr><td class="em">生态嵌入</td><td>覆盖终端设备</td><td>8,000 万+</td><td>2025.09</td></tr>
+        <tr><td class="em">生态嵌入</td><td>兼容主流硬件芯片</td><td>40+</td><td>公开运营资料</td></tr>
+        <tr><td class="em">生态嵌入</td><td>中国前十大互联网公司深度集成</td><td>9 / 10</td><td>2025</td></tr>
+        <tr><td class="em">生态嵌入</td><td>覆盖国家和地区</td><td>218+</td><td>全球</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 6 — 开发者网络公开运营指标。<span class="src">资料来源：智谱公开运营资料（原 dashboard 开发者模块）。</span></div>
+  </div>
+  <p>公开运营资料还披露：日均 Token 消耗由 2022 年的 5 亿增至 2025 上半年的 4.6 万亿；MaaS 平台 ARR 约 17 亿元（12 个月增长 60 倍）；付费 Token 流量公开表述为「超过所有国产模型之和」。需强调：上述指标的统计对象与时间点并不完全相同，不应相加或互相替代。</p>
+
+  <!-- ===== 资本 ===== -->
+  <h2 id="capital"><span class="num-tag">§5</span>资本与 IPO：港交所主板上市</h2>
+  <p class="h2-sub">以下为公开上市资料中的上市、募资与资本背景字段</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>项目</th><th>公开资料</th><th>口径说明</th></tr></thead>
+      <tbody>
+        <tr><td class="em">上市日期</td><td>2026 年 1 月 8 日</td><td>港交所主板（02513.HK）</td></tr>
+        <tr><td class="em">每股发行价</td><td>116.20 港元</td><td>发行 3,741.95 万股 H 股</td></tr>
+        <tr><td class="em">IPO 募资</td><td>约 43 亿港元</td><td>基石投资约 29.8 亿港元，占近 70%</td></tr>
+        <tr><td class="em">IPO 市值</td><td>约 511 亿港元</td><td>发行时点汇总值</td></tr>
+        <tr><td class="em">募资用途</td><td>70% 通用大模型研发（约 29 亿港元）；10% MaaS 平台优化（约 4.2 亿港元）</td><td>募集资金用途结构</td></tr>
+        <tr><td class="em">IPO 前融资</td><td>8 轮，累计超 83 亿元人民币</td><td>融资背景</td></tr>
+        <tr><td class="em">主要投资方</td><td>美团、蚂蚁、阿里、腾讯、小米、金山、君联资本、红杉、高瓴、启明创投等</td><td>上市资料列示</td></tr>
+        <tr><td class="em">行业排名</td><td>2024 年中国独立通用大模型开发商收入第一，市场份额 6.6%</td><td>公开市场资料</td></tr>
+        <tr><td class="em">上市首日市值</td><td>约 4,079 亿港元；收涨 31.94%、报 915 港元</td><td>时间标注 2026.04.01</td></tr>
+      </tbody>
+    </table>
+    <div class="cap">表 7 — 智谱 AI 上市与资本背景。<span class="src">资料来源：香港联交所招股书、公开市场资料。</span></div>
+  </div>
+
+  <!-- ===== 事实链条 ===== -->
+  <h2 id="chain"><span class="num-tag">§6</span>业务事实链条：算力—产品—价格—采用—结果</h2>
+  <p class="h2-sub">公开资料之间的事实关联，不把相关关系表述为因果关系</p>
+  <p>沿价值链条串联五环：<b>① 研发与训练</b>（研发费用 31.80 亿元；2024 年算力成本 15.53 亿元，占研发总开支 70.7%）→ <b>② 模型产品</b>（GLM-4.5 演进至 GLM-5.2，参数、上下文、架构持续扩展）→ <b>③ 多层价格</b>（国内 API、海外 API、订阅、微调、私有实例、年套餐并行）→ <b>④ 开发者采用</b>（注册用户、Coding Plan 付费开发者、Token 流量、ARR 均已披露）→ <b>⑤ 财务结果</b>（API 收入 +292.6%，但云端/API 毛利率 18.9%、整体 41.0%）。</p>
+  <p>两条中性观察：A）收入结构多元，云端收入增速最高但 2025 年毛利率仍低于本地化部署；B）价格体系从低价/免费模型到前沿模型、Coding Plan 与私有化套餐分层，说明<b>同一模型能力通过不同服务形态被差异化定价</b>——这正是平台经济学中「算力资源配置如何映射为服务定价」的微观样本。</p>
+
+  <!-- ===== 来源 ===== -->
+  <div class="refs" id="refs">
+    <h2>数据来源</h2>
+    <ol>
+      <li>智谱 2025 年度报告（财务、业务与生态披露）— <a href="https://www.zhipuai.cn/investor_relations/2025%E5%B9%B4%E6%8A%A5.pdf" target="_blank" rel="noreferrer">zhipuai.cn/investor_relations/2025年报.pdf</a></li>
+      <li>香港联交所招股书（模型与上市文件资料）— <a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1230/2025123000018_c.pdf" target="_blank" rel="noreferrer">hkexnews.hk</a></li>
+      <li>智谱开放平台价格页（国内 API、微调、私有化）— <a href="https://open.bigmodel.cn/pricing" target="_blank" rel="noreferrer">open.bigmodel.cn/pricing</a></li>
+      <li>GLM Coding Plan（开发者套餐）— <a href="https://open.bigmodel.cn/glm-coding" target="_blank" rel="noreferrer">open.bigmodel.cn/glm-coding</a></li>
+      <li>OpenRouter Rankings（补充性外部市场页面）— <a href="https://openrouter.ai/rankings" target="_blank" rel="noreferrer">openrouter.ai/rankings</a></li>
+    </ol>
+    <p style="margin-top:14px;font-size:12.5px;color:var(--light-gray)">资料时点 2026 年 8 月；价格、运营指标与网页页面可能继续变化，请以对应年度报告、上市文件或官方页面最新版本为准。本页仅供公开研究与信息参考，不构成投资建议。</p>
+  </div>
+
+</div>
+
+<div class="foot">单文件离线交付 · distill.pub 风格重制 · 中文楷体 / 英文 Georgia · 2026 年 10 月 10 日（北京时间）整理</div>
+
+<script>
+/* 极简分组柱状图：2022-2025 营业收入 / 研发费用 / 净亏损 */
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+  const W=720,H=340,pad={l:54,r:24,t:20,b:50};
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`});
+  const pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+  const cats=[
+    {label:"2022",v:[0.57,0.84,1.43]},
+    {label:"2023",v:[1.25,5.29,7.88]},
+    {label:"2024",v:[3.12,21.95,29.58]},
+    {label:"2025",v:[7.24,31.80,47.18]}
+  ];
+  const maxY=50, series=[{n:"营业收入",c:"#16243a"},{n:"研发费用",c:"#5b7a99"},{n:"净亏损",c:"#c9b27a"}];
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ph*(i/4);
+    svg.appendChild(el("line",{x1:pad.l,y1:y,x2:W-pad.r,y2:y,stroke:"#ececec","stroke-width":1}));
+    const t=el("text",{x:pad.l-8,y:y+4,"text-anchor":"end","font-size":11,fill:"#9aa4b2"});
+    t.textContent=Math.round(maxY*(1-i/4));svg.appendChild(t);
+  }
+  const gW=pw/cats.length, bw=gW*0.7/3;
+  cats.forEach((c,ci)=>{
+    const gx=pad.l+gW*ci+gW*0.15;
+    c.v.forEach((val,si)=>{
+      const h=ph*(val/maxY), x=gx+si*(bw+5), y=pad.t+ph-h;
+      svg.appendChild(el("rect",{x,y,width:bw,height:h,fill:series[si].c,rx:2}));
+      const t=el("text",{x:x+bw/2,y:y-4,"text-anchor":"middle","font-size":10,fill:"#333"});
+      t.textContent=val.toFixed(2);svg.appendChild(t);
+    });
+    const xt=el("text",{x:pad.l+gW*ci+gW/2,y:H-pad.b+20,"text-anchor":"middle","font-size":13,fill:"#333","font-weight":700});
+    xt.textContent=c.label;svg.appendChild(xt);
+  });
+  let lx=pad.l;
+  series.forEach(s=>{
+    svg.appendChild(el("rect",{x:lx,y:H-12,width:12,height:12,fill:s.c,rx:2}));
+    const t=el("text",{x:lx+17,y:H-2,"font-size":12,fill:"#333"});t.textContent=s.n;svg.appendChild(t);
+    lx+=s.n.length*13+30;
+  });
+  document.getElementById("c_fin").appendChild(svg);
+})();
+
+/* TOC scrollspy */
+const links=[...document.querySelectorAll(".toc a")];
+const secs=links.map(a=>document.querySelector(a.getAttribute("href"))).filter(Boolean);
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){const id="#"+e.target.id;
+    links.forEach(l=>l.classList.toggle("active",l.getAttribute("href")===id));}});
+},{rootMargin:"-20% 0px -70% 0px"});
+secs.forEach(s=>obs.observe(s));
+</script>
 </body>
 </html>
