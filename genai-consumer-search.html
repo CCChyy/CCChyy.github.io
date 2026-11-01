@@ -24,7 +24,7 @@ a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .toc{position:sticky;top:62px;font:14px/1.7 "Kaiti SC",STKaiti,KaiTi,serif}.toc b{display:block;color:var(--blue);letter-spacing:1px;margin-bottom:14px}.toc a{display:block;color:#65707c;margin:9px 0}
 .content h2{font-size:30px;line-height:1.4;font-weight:500;border-top:1px solid var(--line);padding-top:30px;margin:62px 0 18px}.content h3{font-size:22px;font-weight:500;margin:35px 0 10px}.content p{margin:0 0 20px}.lead{font-size:19px}
 .callout{background:var(--soft);border-left:3px solid var(--blue);padding:17px 21px;margin:28px 0}
-.eq{font:20px/1.8 "Charter BT",Charter,"Times New Roman",serif;text-align:center;background:#fbfbfc;border-block:1px solid var(--line);padding:19px;overflow:auto;margin:24px 0;white-space:nowrap}.eq var{font-style:italic}.eq .roman{font-style:normal}.eq .positive{color:#2e7653}.eq .negative{color:#a35747}
+.eq{font:20px/1.8 "Times New Roman",Times,serif;font-style:normal;text-align:center;background:#fbfbfc;border-block:1px solid var(--line);padding:19px;overflow:visible;margin:24px 0;white-space:nowrap}.eq *{font-style:normal}.eq var{font-style:italic}.eq .roman,.eq .roman *,.eq .op,.eq .op *,.eq sup,.eq sub{font-style:normal}.eq .positive{color:#2e7653}.eq .negative{color:#a35747}.eq-long{white-space:normal}.eq-long .formula-line{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.18em}.eq-long .frac{margin:0 .2em}.frac{display:inline-flex;flex-direction:column;vertical-align:middle;line-height:1.1;text-align:center;margin:0 .15em}.frac .num{border-bottom:1px solid currentColor;padding:0 .18em}.frac .den{padding:0 .18em}
 .figure{margin:32px 0 38px;max-width:100%}.figure figcaption{color:var(--muted);font-size:14px;line-height:1.75;margin-top:10px;text-align:center}
 .effect-figure{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:28px 0 38px}.effect-card{border:1px solid var(--line);background:var(--warm);padding:18px 15px;text-align:center}.effect-card h4{margin:0 0 12px;color:var(--blue);font:18px "Kaiti SC",STKaiti,KaiTi,serif}.effect-card p{font-size:14px;line-height:1.7;margin:0}.curve{height:100px;position:relative;margin:12px 0;border-bottom:1px solid #aeb8c4;border-left:1px solid #aeb8c4}.curve:before,.curve:after{content:"";position:absolute;left:8%;right:7%;height:2px;background:#285caa;transform:rotate(-18deg);top:54px}.curve:after{background:#9eabb8;transform:rotate(18deg);top:31px;opacity:.8}.curve .shade{position:absolute;bottom:0;left:48%;width:42%;height:60%;background:#c9dcf6aa;border-top:1px solid #7da5d5}
 .table-wrap{overflow:auto;margin:28px 0 34px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:center;vertical-align:middle;white-space:nowrap}th{color:#315d91;background:#fafbfd;font-weight:500}td:first-child,th:first-child{text-align:left}tbody tr:last-child td{border-bottom:0}.table-title{font:18px "Kaiti SC",STKaiti,KaiTi,serif;color:var(--blue);margin:26px 0 8px}
@@ -37,7 +37,6 @@ footer{border-top:1px solid var(--line);max-width:790px;margin:55px auto 0;paddi
 </head>
 <body>
 <div class="page">
-<nav class="nav"><a href="index.html">陈汇元</a><a href="#abstract">摘要</a><a href="#contribution">边际贡献</a><a href="#model">理论模型</a><a href="#data">实证设计</a><a href="#results">实证结果</a><a href="#mechanism">机制与异质性</a><a href="#appendix">附录</a></nav>
 <header class="hero">
 <div class="eyebrow">PLATFORM ECONOMICS · GENERATIVE AI · CONSUMER SEARCH</div>
 <h1>生成式人工智能中的经验积累与消费者使用</h1>
@@ -52,7 +51,7 @@ footer{border-top:1px solid var(--line);max-width:790px;margin:55px auto 0;paddi
 <h3>引入历史经验积累，拓展经典消费者搜寻模型</h3><p>经典消费者搜寻模型通常将搜寻结果的概率分布视为外生给定。本文将消费者历史经验引入模型，并将其刻画为影响生成式人工智能答案质量分布的状态变量，从而分析经验积累如何改变消费者的 GenAI 使用决策、保留答案质量及搜寻行为。</p>
 <h3>补充生成式人工智能研究的微观个体视角</h3><p>现有生成式人工智能研究主要关注技术性能、生产率提升、企业应用及宏观经济影响，对消费者如何评价 GenAI 答案、决定是否继续搜寻以及拓展 GenAI 使用主题的微观决策过程关注相对不足。本文从消费者搜寻行为出发，刻画生成式人工智能使用的形成机制。</p>
 <h3>揭示历史经验影响 GenAI 深度使用的双重效应</h3><p>历史经验一方面改善 GenAI 答案分布，提高消费者获得高质量答案的效率，形成质量效应；另一方面提高消费者的内生保留答案，使其对 GenAI 答案提出更高标准与要求，形成标准效应。两种效应方向相反，因此历史经验对 GenAI 深度使用的净影响取决于二者的相对强弱。</p>
-<figure class="figure"><div class="effect-figure"><div class="effect-card"><h4>（a）初始经验</h4><div class="curve"><span class="shade"></span></div><p>答案质量分布与保留答案质量共同决定接受概率。</p></div><div class="effect-card"><h4>（b）质量效应</h4><div class="curve"><span class="shade"></span></div><p>分布向高质量方向改善，超过 <var>z<sup>*</sup></var> 的面积扩大。</p></div><div class="effect-card"><h4>（c）标准效应</h4><div class="curve"><span class="shade"></span></div><p>保留答案由 <var>z<sub>0</sub><sup>*</sup></var> 提高至 <var>z<sub>1</sub><sup>*</sup></var>，接受标准提高。</p></div></div><figcaption>图 1　历史经验影响消费者 GenAI 使用的质量效应与标准效应。</figcaption></figure>
+<figure class="figure"><img src="assets/genai-experience-effects.png" alt="基准搜寻、经验改善答案分布与保留标准内生调整三联图"><figcaption>图 1　历史经验影响消费者 GenAI 使用的质量效应与标准效应。</figcaption></figure>
 </section>
 <section id="assumptions"><h2>2　基本假定</h2>
 <p><span class="tag">假定 1</span><b>答案质量分布。</b> 消费者使用 GenAI 后获得的答案质量为 <var>z</var>，其条件分布取决于消费者的历史经验 <var>e</var>，即 <var>z∼F(z|e)</var>。其中，<var>F(·|e)</var> 为连续分布函数，密度函数为 <var>f(z|e)</var>，答案质量上界为 <var>z̄</var>。</p>
@@ -68,12 +67,12 @@ footer{border-top:1px solid var(--line);max-width:790px;margin:55px auto 0;paddi
 <p>搜寻成本恰好等于获得质量高于当前保留标准答案的期望改善收益。给定经验 <var>e</var>，消费者利用 GenAI 搜寻一次答案便接受的概率为：</p>
 <div class="eq"><var>p(e)</var> = <span class="roman">Pr</span>[<var>z≥z<sup>*</sup>(e)</var>|<var>e</var>] = 1−<var>F[z<sup>*</sup>(e)|e]</var> <span class="roman">(3)</span></div>
 <p>考察历史经验积累对此概率的影响：</p>
-<div class="eq"><var>p′(e)</var> = <span class="positive">−<var>F<sub>e</sub>[z<sup>*</sup>(e)|e]</span> <span class="roman">（质量效应，+）</span> <span class="negative">− <var>f[z<sup>*</sup>(e)|e]z<sup>*′</sup>(e)</span> <span class="roman">（标准效应，−）</span> <span class="roman">(4)</span></div>
+<div class="eq eq-compact"><var>p′(e)</var> = <span class="positive">−<var>F<sub>e</sub>[z<sup>*</sup>(e)|e]</var></span> <span class="roman">（质量效应，+）</span> <span class="negative">−<var>f[z<sup>*</sup>(e)|e]z<sup>*′</sup>(e)</var></span> <span class="roman">（标准效应，−）</span> <span class="roman">(4)</span></div>
 <p>历史经验改善答案质量分布，使答案超过给定保留标准的概率提高，形成质量效应；同时，答案质量分布改善提高继续搜寻的预期收益，使内生保留答案质量提高，形成标准效应。前者提高一次搜寻后接受答案的可能性，后者降低一次搜寻后的接受概率。</p>
 <p>由于每次搜寻相互独立，且每次接受概率均为 <var>p(e)</var>，消费者期望搜寻次数为：</p>
-<div class="eq"><span class="roman">E</span>[<var>N|e</var>] = 1/<var>p(e)</var> = 1/{1−<var>F[z<sup>*</sup>(e)|e]</var>} <span class="roman">(5)</span></div>
+<div class="eq"><span class="roman">E</span>[<var>N|e</var>] = <span class="frac"><span class="num">1</span><span class="den"><var>p(e)</var></span></span> = <span class="frac"><span class="num">1</span><span class="den">1−<var>F[z<sup>*</sup>(e)|e]</var></span></span> <span class="roman">(5)</span></div>
 <p>历史经验对期望搜寻次数的影响同样包含双重效应：</p>
-<div class="eq">∂<span class="roman">E</span>[<var>N|e</var>]/∂<var>e</var> = −{<span class="positive">−<var>F<sub>e</sub>[z<sup>*</sup>(e)|e]</span> <span class="roman">（质量效应）</span> <span class="negative">−<var>f[z<sup>*</sup>(e)|e]z<sup>*′</sup>(e)</span> <span class="roman">（标准效应）</span>}/{1−<var>F[z<sup>*</sup>(e)|e]</var>}<sup>2</sup> <span class="roman">(6)</span></div>
+<div class="eq eq-long"><div class="formula-line"><span>∂<span class="roman">E</span>[<var>N|e</var>]/∂<var>e</var></span><span class="roman"> = −</span><span class="frac"><span class="num"><span class="positive">−<var>F<sub>e</sub>[z<sup>*</sup>(e)|e]</var></span> <span class="roman">（质量效应）</span> <span class="negative">−<var>f[z<sup>*</sup>(e)|e]z<sup>*′</sup>(e)</var></span> <span class="roman">（标准效应）</span></span><span class="den">{1−<var>F[z<sup>*</sup>(e)|e]</var>}<sup>2</sup></span></span><span class="roman">(6)</span></div></div>
 <p>当标准效应占主导时，历史经验增加期望搜寻次数；当质量效应占主导时，历史经验减少期望搜寻次数。</p>
 </section>
 <section id="data"><h2>4　实证设计</h2>
@@ -106,7 +105,7 @@ footer{border-top:1px solid var(--line);max-width:790px;margin:55px auto 0;paddi
 </section>
 <section id="conclusion"><h2>9　结论</h2><p>本文从消费者搜寻视角分析生成式人工智能使用的形成机制。理论模型将历史经验作为影响答案质量分布的状态变量，揭示经验积累通过质量效应与标准效应共同作用于消费者的接受决策、保留答案质量和后续搜寻。</p><p>实证分析沿着“是否使用—使用深度—主题范围”的路径展开。结果显示，历史经验促进消费者使用 GenAI，并整体上提高使用深度；在不同经验区间，质量效应与标准效应的相对强度不同，因而使用深度呈现异质性。答案质量和知识主题范围进一步构成经验影响深度使用的重要传导路径。会员身份强化了经验与 GenAI 使用之间的关系，会员消费者在使用、深度、答案质量和主题范围四个维度均体现出更强的正向响应。</p><p>消费者经验不仅改变其使用频率，也改变其评价答案的标准、搜寻策略和与 GenAI 互动的内容边界。生成式人工智能平台可以据此优化答案反馈、个性化服务和会员权益设计，使消费者经验积累转化为更稳定、更深入的使用关系。</p></section>
 <section id="appendix"><h2>技术附录</h2><details open><summary>变量说明</summary><p><var>use</var> 表示用户—周度是否使用 GenAI；<var>exp</var> 表示历史使用经验；<var>depth</var> 表示使用深度；<var>z</var> 表示答案质量；<var>theme</var> 表示对话涉及的知识主题范围；<var>plus</var> 表示会员身份；<var>ρ<sub>i</sub></var> 与 <var>μ<sub>t</sub></var> 分别表示个体固定效应与时间固定效应。</p></details><details><summary>经验积累的两个渠道</summary><p>质量效应对应答案质量分布的改善：在同一保留答案质量下，消费者获得可接受答案的概率提高。标准效应对应保留答案质量的内生提高：消费者获得更多经验后形成更高质量要求，继续搜寻的价值上升。</p></details><details><summary>实证结果索引</summary><p>表 1 对应使用概率；表 2 对应使用深度；表 3 对应经验分位数异质性；表 4 对应答案质量中介；表 5 对应知识主题中介；表 6 对应会员身份异质性。</p></details></section>
-<section><h2>作品说明</h2><p>本网页依据“生成式人工智能中的经验积累与消费者使用——消费者搜寻的视角”研究材料整理制作，延续个人主页研究网页的 Distill 风格，保留理论模型、研究假说、数据说明与六张实证回归表。</p><p><a href="index.html">返回个人主页 →</a></p></section>
+<section><h2>作品说明</h2><p>本网页依据“生成式人工智能中的经验积累与消费者使用——消费者搜寻的视角”研究材料整理制作，延续个人主页研究网页的 Distill 风格，保留理论模型、研究假说、数据说明与六张实证回归表。</p></section>
 </main></div>
 <footer>更新于 2026 年 11 月 · 研究网页作品 · 版式参考 Distill</footer>
 <a class="contact" href="mailto:nkuchy@163.com">联系</a>
